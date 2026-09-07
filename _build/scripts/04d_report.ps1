@@ -1,0 +1,34 @@
+<# Re-measure loudness of every normalised asset -> audio_report.csv #>
+$ErrorActionPreference = 'Stop'
+[Threading.Thread]::CurrentThread.CurrentCulture = 'en-US'
+. "$PSScriptRoot\_config.ps1"
+$build = $Cfg.build; $tree = $Cfg.tree; $ffmpeg = $Cfg.ffmpeg; $ffprobe = $Cfg.ffprobe
+
+function Measure-LU([string]$p) {
+    $o = (& $ffmpeg -hide_banner -i $p -map 0:a:0 `
+          -af 'aformat=channel_layouts=mono,ebur128=peak=true:framelog=quiet' `
+          -f null - 2>&1) -join "`n"
+    $sum = ($o -split 'Summary:')[-1]
+    $I  = if ($sum -match 'I:\s*(-?[\d.]+)\s*LUFS')   { [double]$Matches[1] } else { $null }
+    $TP = if ($sum -match 'Peak:\s*(-?[\d.]+)\s*dBFS') { [double]$Matches[1] } else { $null }
+    @($I, $TP)
+}
+
+$rows = foreach ($f in (Get-ChildItem -LiteralPath $tree -Recurse -Filter *.mp3 | Sort-Object FullName)) {
+    $m = Measure-LU $f.FullName
+    $j = & $ffprobe -v error -show_entries stream=sample_rate,channels `
+         -of csv=p=0 -- $f.FullName
+    [pscustomobject]@{
+        file = $f.FullName.Substring($tree.Length + 1)
+        lufs = $m[0]; peak_dbfs = $m[1]; fmt = $j
+    }
+}
+$rows | Export-Csv -LiteralPath (Join-Path $build 'audio_report.csv') -NoTypeInformation -Encoding UTF8
+$l = [double[]]($rows.lufs | Where-Object { $_ -ne $null })
+$p = [double[]]($rows.peak_dbfs | Where-Object { $_ -ne $null })
+"{0} fichiers" -f $rows.Count
+"LUFS : min={0:N1} max={1:N1} moy={2:N1}" -f ($l|measure -min).Minimum,($l|measure -max).Maximum,($l|measure -average).Average
+"PEAK : min={0:N1} max={1:N1}" -f ($p|measure -min).Minimum,($p|measure -max).Maximum
+"hors 44100/mono : {0}" -f ($rows | Where-Object { $_.fmt -ne '44100,1' }).Count
+$rows | Where-Object { $_.fmt -ne '44100,1' -or [math]::Abs([double]$_.lufs + 16) -gt 1.5 } |
+    ForEach-Object { "  ! {0}  {1} LUFS  {2}" -f $_.file, $_.lufs, $_.fmt }

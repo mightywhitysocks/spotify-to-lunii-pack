@@ -1,0 +1,842 @@
+[
+  {
+    "key": "aime tout faire tout seul",
+    "slug": "timote-aime-tout-faire-tout-seul",
+    "title": "Timoté aime tout faire tout seul",
+    "category": "1 Quotidien et autonomie",
+    "chapters": [
+      "031 Timoté - Timoté aime tout faire tout seul.mp3"
+    ],
+    "seconds": 348.0,
+    "lufs": [
+      -12.1
+    ],
+    "peak_dbfs": [
+      2.3
+    ]
+  },
+  {
+    "key": "et sa tetine",
+    "slug": "timote-et-sa-tetine",
+    "title": "Timoté et sa tétine",
+    "category": "1 Quotidien et autonomie",
+    "chapters": [
+      "052 Timoté - Chapitre 1 - Timoté et sa tétine.mp3",
+      "053 Timoté - Chapitre 2 - Timoté et sa tétine.mp3"
+    ],
+    "seconds": 316.2,
+    "lufs": [
+      -12.4,
+      -12.7
+    ],
+    "peak_dbfs": [
+      2.3,
+      2.6
+    ]
+  },
+  {
+    "key": "et son doudou",
+    "slug": "timote-et-son-doudou",
+    "title": "Timoté et son doudou",
+    "category": "1 Quotidien et autonomie",
+    "chapters": [
+      "036 Timoté - Chapitre 1 - Timoté et son doudou.mp3",
+      "037 Timoté - Chapitre 2 - Timoté et son doudou.mp3"
+    ],
+    "seconds": 342.1,
+    "lufs": [
+      -12.2,
+      -12.3
+    ],
+    "peak_dbfs": [
+      2.2,
+      3.0
+    ]
+  },
+  {
+    "key": "fait un gateau",
+    "slug": "timote-fait-un-gateau",
+    "title": "Timoté fait un gâteau",
+    "category": "1 Quotidien et autonomie",
+    "chapters": [
+      "038 Timoté - Chapitre 1 - Timoté fait un gâteau.mp3",
+      "039 Timoté - Chapitre 2 - Timoté fait un gâteau.mp3"
+    ],
+    "seconds": 363.1,
+    "lufs": [
+      -12.5,
+      -12.3
+    ],
+    "peak_dbfs": [
+      2.6,
+      2.6
+    ]
+  },
+  {
+    "key": "jardine",
+    "slug": "timote-jardine",
+    "title": "Timoté jardine",
+    "category": "1 Quotidien et autonomie",
+    "chapters": [
+      "044 Timoté - Chapitre 1 - Timoté jardine.mp3",
+      "045 Timoté - Chapitre 2 - Timoté jardine.mp3"
+    ],
+    "seconds": 360.2,
+    "lufs": [
+      -12.4,
+      -13.3
+    ],
+    "peak_dbfs": [
+      2.4,
+      1.8
+    ]
+  },
+  {
+    "key": "devient grand frere",
+    "slug": "timote-devient-grand-frere",
+    "title": "Timoté devient grand frère",
+    "category": "2 Emotions et grandir",
+    "chapters": [
+      "103 Timoté - Chapitre 1 - Timoté devient grand frère.mp3",
+      "191 Timoté - Chapitre 2 - Timoté devient grand frère.mp3"
+    ],
+    "seconds": 294.0,
+    "lufs": [
+      -12.2,
+      -12.2
+    ],
+    "peak_dbfs": [
+      2.5,
+      2.4
+    ]
+  },
+  {
+    "key": "dort chez un copain",
+    "slug": "timote-dort-chez-un-copain",
+    "title": "Timoté dort chez un copain",
+    "category": "2 Emotions et grandir",
+    "chapters": [
+      "023 Timoté - Chapitre 1 - Timoté dort chez un copain.mp3",
+      "024 Timoté - Chapitre 2 - Timoté dort chez un copain.mp3"
+    ],
+    "seconds": 358.2,
+    "lufs": [
+      -12.1,
+      -12.3
+    ],
+    "peak_dbfs": [
+      2.7,
+      2.2
+    ]
+  },
+  {
+    "key": "est amoureux",
+    "slug": "timote-est-amoureux",
+    "title": "Timoté est amoureux",
+    "category": "2 Emotions et grandir",
+    "chapters": [
+      "008 Timoté - Timoté est amoureux.mp3"
+    ],
+    "seconds": 378.0,
+    "lufs": [
+      -12.4
+    ],
+    "peak_dbfs": [
+      2.4
+    ]
+  },
+  {
+    "key": "et la petite souris",
+    "slug": "timote-et-la-petite-souris",
+    "title": "Timoté et la petite souris",
+    "category": "2 Emotions et grandir",
+    "chapters": [
+      "025 Timoté - Chapitre 1 - Timoté et la petite souris.mp3",
+      "026 Timoté - Chapitre 2 - Timoté et la petite souris.mp3"
+    ],
+    "seconds": 374.2,
+    "lufs": [
+      -12.0,
+      -12.8
+    ],
+    "peak_dbfs": [
+      2.0,
+      1.7
+    ]
+  },
+  {
+    "key": "et les ecrans",
+    "slug": "timote-et-les-ecrans",
+    "title": "Timoté et les écrans",
+    "category": "2 Emotions et grandir",
+    "chapters": [
+      "003 Timoté - Timoté et les écrans - Timoté.mp3"
+    ],
+    "seconds": 344.0,
+    "lufs": [
+      -12.3
+    ],
+    "peak_dbfs": [
+      2.4
+    ]
+  },
+  {
+    "key": "et ses emotions",
+    "slug": "timote-et-ses-emotions",
+    "title": "Timoté et ses émotions",
+    "category": "2 Emotions et grandir",
+    "chapters": [
+      "064 Timoté - Chapitre 1 - Timoté et ses émotions.mp3",
+      "065 Timoté - Chapitre 2 - Timoté et ses émotions.mp3"
+    ],
+    "seconds": 363.1,
+    "lufs": [
+      -12.8,
+      -12.2
+    ],
+    "peak_dbfs": [
+      2.6,
+      2.9
+    ]
+  },
+  {
+    "key": "fait des betises",
+    "slug": "timote-fait-des-betises",
+    "title": "Timoté fait des bêtises",
+    "category": "2 Emotions et grandir",
+    "chapters": [
+      "072 Timoté - Chapitre 1 - Timoté fait des bêtises.mp3",
+      "073 Timoté - Chapitre 2 - Timoté fait des bêtises.mp3"
+    ],
+    "seconds": 301.1,
+    "lufs": [
+      -12.2,
+      -13.1
+    ],
+    "peak_dbfs": [
+      2.2,
+      2.2
+    ]
+  },
+  {
+    "key": "aime la musique",
+    "slug": "timote-aime-la-musique",
+    "title": "Timoté aime la musique",
+    "category": "3 Ecole",
+    "chapters": [
+      "027 Timoté - Chapitre 1 - Timoté aime la musique.mp3",
+      "028 Timoté - Chapitre 2 - Timoté aime la musique.mp3"
+    ],
+    "seconds": 397.1,
+    "lufs": [
+      -12.2,
+      -13.0
+    ],
+    "peak_dbfs": [
+      2.4,
+      2.6
+    ]
+  },
+  {
+    "key": "apprend l anglais",
+    "slug": "timote-apprend-l-anglais",
+    "title": "Timoté apprend l'anglais",
+    "category": "3 Ecole",
+    "chapters": [
+      "004 Timoté - Chapitre 1 - Timoté apprend l'anglais.mp3",
+      "005 Timoté - Chapitre 2 - Timoté apprend l'anglais.mp3"
+    ],
+    "seconds": 441.2,
+    "lufs": [
+      -13.0,
+      -12.4
+    ],
+    "peak_dbfs": [
+      3.0,
+      2.2
+    ]
+  },
+  {
+    "key": "decouvre les chiffres",
+    "slug": "timote-decouvre-les-chiffres",
+    "title": "Timoté découvre les chiffres",
+    "category": "3 Ecole",
+    "chapters": [
+      "019 Timoté - Chapitre 1 - Timoté découvre les chiffres.mp3",
+      "020 Timoté - Chapitre 2 - Timoté découvre les chiffres.mp3"
+    ],
+    "seconds": 452.1,
+    "lufs": [
+      -12.3,
+      -12.7
+    ],
+    "peak_dbfs": [
+      2.2,
+      2.1
+    ]
+  },
+  {
+    "key": "decouvre les lettres",
+    "slug": "timote-decouvre-les-lettres",
+    "title": "Timoté découvre les lettres",
+    "category": "3 Ecole",
+    "chapters": [
+      "021 Timoté - Chapitre 1 - Timoté découvre les lettres.mp3",
+      "022 Timoté - Chapitre 2 - Timoté découvre les lettres.mp3"
+    ],
+    "seconds": 444.2,
+    "lufs": [
+      -12.5,
+      -12.4
+    ],
+    "peak_dbfs": [
+      2.9,
+      2.7
+    ]
+  },
+  {
+    "key": "entre a l ecole",
+    "slug": "timote-entre-a-l-ecole",
+    "title": "Timoté entre à l'école",
+    "category": "3 Ecole",
+    "chapters": [
+      "032 Timoté - Chapitre 1 - Timoté entre à l'école.mp3",
+      "033 Timoté - Chapitre 2 - Timoté entre à l'école.mp3"
+    ],
+    "seconds": 336.0,
+    "lufs": [
+      -12.7,
+      -12.3
+    ],
+    "peak_dbfs": [
+      2.2,
+      2.5
+    ]
+  },
+  {
+    "key": "va a la cantine",
+    "slug": "timote-va-a-la-cantine",
+    "title": "Timoté va à la cantine",
+    "category": "3 Ecole",
+    "chapters": [
+      "080 Timoté - Chapitre 1 - Timoté va à la cantine.mp3",
+      "081 Timoté - Chapitre 2 - Timoté va à la cantine.mp3"
+    ],
+    "seconds": 286.1,
+    "lufs": [
+      -12.3,
+      -12.7
+    ],
+    "peak_dbfs": [
+      1.9,
+      1.8
+    ]
+  },
+  {
+    "key": "va au centre de loisirs",
+    "slug": "timote-va-au-centre-de-loisirs",
+    "title": "Timoté va au centre de loisirs",
+    "category": "3 Ecole",
+    "chapters": [
+      "011 Timoté - Chapitre 1 - Timoté va au centre de loisirs.mp3",
+      "012 Timoté - Chapitre 2 - Timoté va au centre de loisirs.mp3"
+    ],
+    "seconds": 384.1,
+    "lufs": [
+      -12.5,
+      -12.2
+    ],
+    "peak_dbfs": [
+      2.6,
+      2.1
+    ]
+  },
+  {
+    "key": "a l aquarium",
+    "slug": "timote-a-l-aquarium",
+    "title": "Timoté à l'aquarium",
+    "category": "4 Sorties et culture",
+    "chapters": [
+      "029 Timoté - Chapitre 1 - Timoté à l'aquarium.mp3",
+      "030 Timoté - Chapitre 2 - Timoté à l'aquarium.mp3"
+    ],
+    "seconds": 353.2,
+    "lufs": [
+      -12.4,
+      -12.4
+    ],
+    "peak_dbfs": [
+      2.4,
+      2.6
+    ]
+  },
+  {
+    "key": "va a la bibliotheque",
+    "slug": "timote-va-a-la-bibliotheque",
+    "title": "Timoté va à la bibliothèque",
+    "category": "4 Sorties et culture",
+    "chapters": [
+      "056 Timoté - Chapitre 1 - Timoté va à la bibliothèque.mp3",
+      "057 Timoté - Chapitre 2 - Timoté va à la bibliothèque.mp3"
+    ],
+    "seconds": 372.1,
+    "lufs": [
+      -12.2,
+      -13.3
+    ],
+    "peak_dbfs": [
+      2.8,
+      1.9
+    ]
+  },
+  {
+    "key": "va au cirque",
+    "slug": "timote-va-au-cirque",
+    "title": "Timoté va au cirque",
+    "category": "4 Sorties et culture",
+    "chapters": [
+      "076 Timoté - Chapitre 1 - Timoté va au cirque.mp3",
+      "077 Timoté - Chapitre 2 - Timoté va au cirque.mp3"
+    ],
+    "seconds": 339.1,
+    "lufs": [
+      -12.9,
+      -12.3
+    ],
+    "peak_dbfs": [
+      1.9,
+      2.1
+    ]
+  },
+  {
+    "key": "va au spectacle",
+    "slug": "timote-va-au-spectacle",
+    "title": "Timoté va au spectacle",
+    "category": "4 Sorties et culture",
+    "chapters": [
+      "054 Timoté - Chapitre 1 - Timoté va au spectacle.mp3",
+      "055 Timoté - Chapitre 2 - Timoté va au spectacle.mp3"
+    ],
+    "seconds": 383.2,
+    "lufs": [
+      -12.6,
+      -12.6
+    ],
+    "peak_dbfs": [
+      2.9,
+      3.1
+    ]
+  },
+  {
+    "key": "visite le louvre",
+    "slug": "timote-visite-le-louvre",
+    "title": "Timoté visite le Louvre",
+    "category": "4 Sorties et culture",
+    "chapters": [
+      "070 Timoté - Chapitre 1 - Timoté visite le Louvre.mp3",
+      "071 Timoté - Chapitre 2 - Timoté visite le Louvre.mp3"
+    ],
+    "seconds": 350.2,
+    "lufs": [
+      -12.5,
+      -12.7
+    ],
+    "peak_dbfs": [
+      2.1,
+      2.5
+    ]
+  },
+  {
+    "key": "visite le musee d orsay",
+    "slug": "timote-visite-le-musee-d-orsay",
+    "title": "Timoté visite le Musée d'Orsay",
+    "category": "4 Sorties et culture",
+    "chapters": [
+      "006 Timoté - Timoté visite le Musée d'Orsay.mp3"
+    ],
+    "seconds": 368.1,
+    "lufs": [
+      -12.4
+    ],
+    "peak_dbfs": [
+      3.0
+    ]
+  },
+  {
+    "key": "visite un chateau fort",
+    "slug": "timote-visite-un-chateau-fort",
+    "title": "Timoté visite un château fort",
+    "category": "4 Sorties et culture",
+    "chapters": [
+      "048 Timoté - Chapitre 1 - Timoté visite un château fort.mp3",
+      "049 Timoté - Chapitre 2 - Timoté visite un château fort.mp3"
+    ],
+    "seconds": 348.0,
+    "lufs": [
+      -12.4,
+      -12.4
+    ],
+    "peak_dbfs": [
+      2.2,
+      2.5
+    ]
+  },
+  {
+    "key": "prend le train",
+    "slug": "timote-prend-le-train",
+    "title": "Timoté prend le train",
+    "category": "5 Voyages",
+    "chapters": [
+      "068 Timoté - Chapitre 1 - Timoté prend le train.mp3",
+      "069 Timoté - Chapitre 2 - Timoté prend le train.mp3"
+    ],
+    "seconds": 343.2,
+    "lufs": [
+      -12.5,
+      -13.0
+    ],
+    "peak_dbfs": [
+      2.2,
+      2.0
+    ]
+  },
+  {
+    "key": "visite la bretagne",
+    "slug": "timote-visite-la-bretagne",
+    "title": "Timoté visite la Bretagne",
+    "category": "5 Voyages",
+    "chapters": [
+      "060 Timoté - Chapitre 1 - Timoté visite la Bretagne.mp3",
+      "061 Timoté - Chapitre 2 - Timoté visite la Bretagne.mp3"
+    ],
+    "seconds": 419.4,
+    "lufs": [
+      -12.3,
+      -12.5
+    ],
+    "peak_dbfs": [
+      2.3,
+      2.3
+    ]
+  },
+  {
+    "key": "visite paris",
+    "slug": "timote-visite-paris",
+    "title": "Timoté visite Paris",
+    "category": "5 Voyages",
+    "chapters": [
+      "058 Timoté - Chapitre 1 - Timoté visite Paris.mp3",
+      "059 Timoté - Chapitre 2 - Timoté visite Paris.mp3"
+    ],
+    "seconds": 351.2,
+    "lufs": [
+      -13.0,
+      -12.3
+    ],
+    "peak_dbfs": [
+      2.1,
+      2.3
+    ]
+  },
+  {
+    "key": "fait de la trottinette",
+    "slug": "timote-fait-de-la-trottinette",
+    "title": "Timoté fait de la trottinette",
+    "category": "6 Sport et plein air",
+    "chapters": [
+      "015 Timoté - Chapitre 1 - Timoté fait de la trottinette.mp3",
+      "016 Timoté - Chapitre 2 - Timoté fait de la trottinette.mp3"
+    ],
+    "seconds": 373.2,
+    "lufs": [
+      -12.3,
+      -12.0
+    ],
+    "peak_dbfs": [
+      1.8,
+      2.3
+    ]
+  },
+  {
+    "key": "fait du ski",
+    "slug": "timote-fait-du-ski",
+    "title": "Timoté fait du ski",
+    "category": "6 Sport et plein air",
+    "chapters": [
+      "074 Timoté - Chapitre 1 - Timoté fait du ski.mp3",
+      "075 Timoté - Chapitre 2 - Timoté fait du ski.mp3"
+    ],
+    "seconds": 297.1,
+    "lufs": [
+      -12.2,
+      -12.4
+    ],
+    "peak_dbfs": [
+      2.3,
+      2.2
+    ]
+  },
+  {
+    "key": "fait du velo",
+    "slug": "timote-fait-du-velo",
+    "title": "Timoté fait du vélo",
+    "category": "6 Sport et plein air",
+    "chapters": [
+      "066 Timoté - Chapitre 1 - Timoté fait du vélo.mp3",
+      "067 Timoté - Chapitre 2 - Timoté fait du vélo.mp3"
+    ],
+    "seconds": 323.0,
+    "lufs": [
+      -12.2,
+      -12.9
+    ],
+    "peak_dbfs": [
+      2.6,
+      1.9
+    ]
+  },
+  {
+    "key": "joue au foot",
+    "slug": "timote-joue-au-foot",
+    "title": "Timoté joue au foot",
+    "category": "6 Sport et plein air",
+    "chapters": [
+      "046 Timoté - Chapitre 1 - Timoté joue au foot.mp3",
+      "047 Timoté - Chapitre 2 - Timoté joue au foot.mp3"
+    ],
+    "seconds": 340.2,
+    "lufs": [
+      -12.3,
+      -12.4
+    ],
+    "peak_dbfs": [
+      2.3,
+      2.7
+    ]
+  },
+  {
+    "key": "et le noel magique",
+    "slug": "timote-et-le-noel-magique",
+    "title": "Timoté et le Noël magique",
+    "category": "7 Fetes",
+    "chapters": [
+      "050 Timoté - Chapitre 1 - Timoté et le Noël magique.mp3",
+      "051 Timoté - Chapitre 2 - Timoté et le Noël magique.mp3"
+    ],
+    "seconds": 345.1,
+    "lufs": [
+      -12.3,
+      -12.7
+    ],
+    "peak_dbfs": [
+      2.3,
+      2.2
+    ]
+  },
+  {
+    "key": "fete la saint nicolas",
+    "slug": "timote-fete-la-saint-nicolas",
+    "title": "Timoté fête la Saint-Nicolas",
+    "category": "7 Fetes",
+    "chapters": [
+      "040 Timoté - Chapitre 1 - Timoté fête la Saint-Nicolas.mp3",
+      "041 Timoté - Chapitre 2 - Timoté fête la Saint-Nicolas.mp3"
+    ],
+    "seconds": 361.1,
+    "lufs": [
+      -12.1,
+      -12.4
+    ],
+    "peak_dbfs": [
+      2.7,
+      2.0
+    ]
+  },
+  {
+    "key": "fete son anniversaire",
+    "slug": "timote-fete-son-anniversaire",
+    "title": "Timoté fête son anniversaire",
+    "category": "7 Fetes",
+    "chapters": [
+      "042 Timoté - Chapitre 1 - Timoté fête son anniversaire.mp3",
+      "043 Timoté - Chapitre 2 - Timoté fête son anniversaire.mp3"
+    ],
+    "seconds": 335.3,
+    "lufs": [
+      -12.1,
+      -12.3
+    ],
+    "peak_dbfs": [
+      2.6,
+      2.1
+    ]
+  },
+  {
+    "key": "est malade",
+    "slug": "timote-est-malade",
+    "title": "Timoté est malade",
+    "category": "8 Corps et sante",
+    "chapters": [
+      "009 Timoté - Chapitre 1 - Timoté est malade - Timoté.mp3",
+      "010 Timoté - Chapitre 2 - Timoté est malade - Timoté.mp3"
+    ],
+    "seconds": 392.2,
+    "lufs": [
+      -12.3,
+      -12.2
+    ],
+    "peak_dbfs": [
+      1.7,
+      1.8
+    ]
+  },
+  {
+    "key": "et ses lunettes",
+    "slug": "timote-et-ses-lunettes",
+    "title": "Timoté et ses lunettes",
+    "category": "8 Corps et sante",
+    "chapters": [
+      "034 Timoté - Chapitre 1 - Timoté et ses lunettes.mp3",
+      "035 Timoté - Chapitre 2 - Timoté et ses lunettes.mp3"
+    ],
+    "seconds": 354.1,
+    "lufs": [
+      -12.2,
+      -12.5
+    ],
+    "peak_dbfs": [
+      2.4,
+      2.4
+    ]
+  },
+  {
+    "key": "va chez le docteur",
+    "slug": "timote-va-chez-le-docteur",
+    "title": "Timoté va chez le docteur",
+    "category": "8 Corps et sante",
+    "chapters": [
+      "078 Timoté - Chapitre 1 - Timoté va chez le docteur.mp3",
+      "079 Timoté - Chapitre 2 - Timoté va chez le docteur.mp3"
+    ],
+    "seconds": 275.0,
+    "lufs": [
+      -12.4,
+      -13.0
+    ],
+    "peak_dbfs": [
+      2.3,
+      2.0
+    ]
+  },
+  {
+    "key": "a la ferme",
+    "slug": "timote-a-la-ferme",
+    "title": "Timoté à la ferme",
+    "category": "9 Nature et animaux",
+    "chapters": [
+      "083 Timoté - Chapitre 1 - Timoté à la ferme.mp3",
+      "084 Timoté - Chapitre 2 - Timoté à la ferme.mp3"
+    ],
+    "seconds": 300.2,
+    "lufs": [
+      -12.3,
+      -12.3
+    ],
+    "peak_dbfs": [
+      2.1,
+      2.2
+    ]
+  },
+  {
+    "key": "aime la planete",
+    "slug": "timote-aime-la-planete",
+    "title": "Timoté aime la planète",
+    "category": "9 Nature et animaux",
+    "chapters": [
+      "001 Timoté - Chapitre 1 - Timoté aime la planète.mp3",
+      "002 Timoté - Chapitre 2 - Timoté aime la planète.mp3"
+    ],
+    "seconds": 388.2,
+    "lufs": [
+      -12.5,
+      -12.2
+    ],
+    "peak_dbfs": [
+      2.7,
+      2.5
+    ]
+  },
+  {
+    "key": "chez les pompiers",
+    "slug": "timote-chez-les-pompiers",
+    "title": "Timoté chez les pompiers",
+    "category": "9 Nature et animaux",
+    "chapters": [
+      "062 Timoté - Chapitre 1 - Timoté chez les pompiers.mp3",
+      "063 Timoté - Chapitre 2 - Timoté chez les pompiers.mp3"
+    ],
+    "seconds": 305.1,
+    "lufs": [
+      -12.7,
+      -12.4
+    ],
+    "peak_dbfs": [
+      1.9,
+      2.2
+    ]
+  },
+  {
+    "key": "et le chantier",
+    "slug": "timote-et-le-chantier",
+    "title": "Timoté et le chantier",
+    "category": "9 Nature et animaux",
+    "chapters": [
+      "007 Timoté - Timoté et le chantier - Timoté.mp3"
+    ],
+    "seconds": 341.0,
+    "lufs": [
+      -12.3
+    ],
+    "peak_dbfs": [
+      2.3
+    ]
+  },
+  {
+    "key": "se promene en foret",
+    "slug": "timote-se-promene-en-foret",
+    "title": "Timoté se promène en forêt",
+    "category": "9 Nature et animaux",
+    "chapters": [
+      "017 Timoté - Chapitre 1 - Timoté se promène en forêt.mp3",
+      "018 Timoté - Chapitre 2 - Timoté se promène en forêt.mp3"
+    ],
+    "seconds": 415.1,
+    "lufs": [
+      -12.2,
+      -13.2
+    ],
+    "peak_dbfs": [
+      2.1,
+      2.5
+    ]
+  },
+  {
+    "key": "veut un animal",
+    "slug": "timote-veut-un-animal",
+    "title": "Timoté veut un animal",
+    "category": "9 Nature et animaux",
+    "chapters": [
+      "013 Timoté - Chapitre 1 - Timoté veut un animal.mp3",
+      "014 Timoté - Chapitre 2 - Timoté veut un animal.mp3"
+    ],
+    "seconds": 372.1,
+    "lufs": [
+      -12.1,
+      -12.0
+    ],
+    "peak_dbfs": [
+      2.2,
+      1.8
+    ]
+  }
+]

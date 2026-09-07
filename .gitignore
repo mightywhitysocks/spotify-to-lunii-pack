@@ -1,0 +1,43 @@
+# --- Secrets ---
+_build/.spotify
+
+# --- Audio (source MP3s + generated clips + pack zip) ---
+*.mp3
+*.wav
+*.flac
+*.m4a
+*.ogg
+*.zip
+
+# --- Images (covers, icons, title cards, previews) ---
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.bmp
+*.tif
+*.tiff
+*.ico
+
+# --- Vector / SVG intermediates ---
+*.svg
+
+# --- Generated review pages (embed audio/images) ---
+*.html
+
+# --- Downloaded third-party tools & models (large binaries) ---
+_build/tools/
+_build/tools/spg.zip
+
+# --- Working / scratch output ---
+_build/work/
+_build/covers/crop/
+_build/covers/gray/
+_build/covers/raw/
+
+# --- OS / editor cruft ---
+Thumbs.db
+.DS_Store
+desktop.ini
+*.log
