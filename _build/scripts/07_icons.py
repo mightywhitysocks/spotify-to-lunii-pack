@@ -20,7 +20,9 @@ from _config import CONFIG, BUILD, TREE, MENU, FFMPEG, require_tool, resolve_tre
 from _covers import place_on_canvas
 
 ICONS = CONFIG["icons"]
-CACHE = BUILD / "tools" / "openmoji"           # legacy OpenMoji cache, unchanged
+# OpenMoji cache, namespaced by set ("black", "color", ...) so switching
+# icons.set in project.json can never reuse PNGs rendered from the old set.
+CACHE = BUILD / "tools" / "openmoji" / str(ICONS["set"])
 ICONS_ROOT = BUILD / "tools" / "icons"         # extra sources, namespaced by prefix
 SOURCES = ICONS.get("sources", {})
 
@@ -108,6 +110,7 @@ def main():
     CACHE.mkdir(parents=True, exist_ok=True)
     stories = json.loads((BUILD / "stories_tree.json").read_text(encoding="utf-8"))
     ok = miss = 0
+    missing = []          # human labels of every screen left without an icon
 
     if CONFIG.get("first_menu_audio_only"):
         p = MENU / "0-item.png"
@@ -120,6 +123,7 @@ def main():
             ok += 1
         else:
             miss += 1
+            missing.append(f"catégorie: {cat}")
             print(f"  cat manquante: {cat}")
 
     for st in stories:
@@ -128,15 +132,33 @@ def main():
         if not code:
             print(f"  ?? pas d'icone pour '{key}' ({st['title']})")
             miss += 1
+            missing.append(f"{st['title']} (pas de code dans story_icons)")
             continue
         if compose(code, resolve_tree_path(st["item_png"])):
             ok += 1
             print(f"  {code}  {st['title']}")
         else:
             miss += 1
+            missing.append(f"{st['title']} ({code})")
             print(f"  ECHEC {code}  {st['title']}")
 
-    print(f"\nOK {ok} images / {miss} manquantes (gardent le texte)")
+    # Report consumed by 05_run_spg.ps1: it only lets SPG skip its own text-image
+    # generation when this says every screen got an icon. Otherwise SPG must fill
+    # the gaps, or a missing/failed icon ships with no image at all on a cold
+    # start (02_merge.ps1 never creates an item.png -- it only reconciles one).
+    report = BUILD / "work" / "icons_report.json"
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.write_text(json.dumps(
+        {"mode": "emoji", "ok": ok, "miss": miss,
+         "missing": missing, "complete": not missing},
+        ensure_ascii=False, indent=2), encoding="utf-8")
+
+    if missing:
+        print(f"\nOK {ok} images / {miss} manquantes -> SPG rendra un écran "
+              f"texte de secours (05_run_spg.ps1 ne passe --skip-image-item-gen "
+              f"que si 0 manquante)")
+    else:
+        print(f"\nOK {ok} images / 0 manquante")
 
 
 if __name__ == "__main__":
