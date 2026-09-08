@@ -64,6 +64,7 @@ DEFAULTS = {
         "set": "black",
         "url": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/{set}/svg/{code}.svg",
         "render_bg": "0xF6F3EC",
+        "sources": {},             # extra icon libraries: {"prefix": "url template with {code}"}
     },
     "covers": {
         "mode": "off",             # "spotify" | "off"

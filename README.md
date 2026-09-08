@@ -54,6 +54,7 @@ et **[`_build/project.schema.md`](_build/project.schema.md)**.
 - `ffmpeg` / `ffprobe`
 - [OpenMoji](https://openmoji.org/) si `icons.mode="emoji"` (cache `_build/tools/openmoji/`)
   — pictogrammes sous licence [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) : *"All emojis designed by OpenMoji – the open-source emoji and icon project. License: CC BY-SA 4.0"* (voir [`docs/decisions/0001-openmoji-icons-evaluation.md`](docs/decisions/0001-openmoji-icons-evaluation.md))
+- [Material Symbols](https://github.com/google/material-design-icons) (licence Apache 2.0, pas d'attribution requise) pour les icônes `icons.sources.material` — cache `_build/tools/icons/material/` (voir [`docs/decisions/0002-icones-ui-multi-bibliotheques.md`](docs/decisions/0002-icones-ui-multi-bibliotheques.md))
 - `_build/.spotify` (`CLIENT_ID=…` / `CLIENT_SECRET=…`) si `covers.mode="spotify"`
 
 ## Installer le pack généré
