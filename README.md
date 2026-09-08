@@ -53,6 +53,7 @@ et **[`_build/project.schema.md`](_build/project.schema.md)**.
 - `faster-whisper` et `ffmpeg-normalize` via [`uv`](https://github.com/astral-sh/uv)
 - `ffmpeg` / `ffprobe`
 - [OpenMoji](https://openmoji.org/) si `icons.mode="emoji"` (cache `_build/tools/openmoji/`)
+  — pictogrammes sous licence [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) : *"All emojis designed by OpenMoji – the open-source emoji and icon project. License: CC BY-SA 4.0"* (voir [`docs/decisions/0001-openmoji-icons-evaluation.md`](docs/decisions/0001-openmoji-icons-evaluation.md))
 - `_build/.spotify` (`CLIENT_ID=…` / `CLIENT_SECRET=…`) si `covers.mode="spotify"`
 
 ## Installer le pack généré
