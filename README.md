@@ -39,8 +39,9 @@ et **[`_build/project.schema.md`](_build/project.schema.md)**.
 2. Copier `_build/project.example.json` vers `_build/project.json` et l'adapter :
    au minimum `title`, `source_dir`, `filename_pattern`. Sans `categories` le menu
    est **à plat**. Voir `_build/project.schema.md` pour toutes les clés.
-3. Renseigner les outils manquants du PATH dans `tools` (ou laisser vide pour
-   auto-détection).
+3. Renseigner les outils manquants du PATH dans `_build/project.local.json`
+   (copier `_build/project.local.json.example` — gitignoré, propre à chaque
+   machine ; ou laisser vide pour auto-détection).
 4. Lancer `01_inventory.ps1` → `02_merge.ps1` → (`03`/`04`/`07`/`08…` selon les
    modes activés) → `04b_normalize.ps1` → `05_run_spg.ps1`.
 

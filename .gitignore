@@ -1,6 +1,9 @@
 # --- Secrets ---
 _build/.spotify
 
+# --- Machine-specific tool paths (see project.local.json.example) ---
+_build/project.local.json
+
 # --- Audio / video (source media + generated clips + pack zip) ---
 *.mp3
 *.wav

@@ -1,0 +1,9 @@
+{
+  "tools": {
+    "ffmpeg": "",
+    "ffprobe": "",
+    "uv": "",
+    "spg": "",
+    "imagemagick": ""
+  }
+}
