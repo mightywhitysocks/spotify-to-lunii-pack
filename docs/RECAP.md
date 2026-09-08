@@ -8,11 +8,11 @@ Un correctif = un commit poussé sur `main`.
 | Issue | Titre | Résolution | Commit |
 |---|---|---|---|
 | #42 | 04b et 04d écrivent tous deux `audio_report.csv` | Déjà corrigé par `900d6bd` (PR #44) : 04b → `normalize_report.csv`, 04d → `audio_report.csv`. Issue fermée. | `900d6bd` |
-| #41 | `_config` ne détecte pas le binaire SPG vendored dans `_build/tools/` | Fallback ajouté dans `Resolve-Tool` / `_resolve_tool` : après l'échec du PATH, scan de `_build/tools/**` pour un nom connu. Mirroir PS/Python. README (Outils + loader) mis à jour. | _(ce commit)_ |
+| #41 | `_config` ne détecte pas le binaire SPG vendored dans `_build/tools/` | Fallback ajouté dans `Resolve-Tool` / `_resolve_tool` : après l'échec du PATH, scan de `_build/tools/**` pour un nom connu. Miroir PS/Python. README (Outils + loader) mis à jour. | `41a4d6c` |
+| #43 | `03_titles.py` re-découpe les fenêtres à override manuel à chaque run | Colonnes `ov_start,ov_end` dans `title_windows.csv` : mémo de la fenêtre override réellement découpée. Le fast-path « kept » accepte désormais une ligne à override tant que `start,end` == `ov_start,ov_end` ; re-découpe seulement si l'utilisateur a bougé la fenêtre (ou `TITLES_FORCE`). Flag humain conservé sur un override gardé. README + `project.schema.md` à jour. | _(ce commit)_ |
 
 ## À suivre (ordre prévu, du plus simple au plus complexe)
 
-- #43 — `03_titles.py` non idempotent sur les fenêtres à override manuel
 - #26 — factoriser la mesure de loudness (01 / 04b / 04d)
 - #18 — auto-suggérer l'emoji d'une histoire depuis son titre
 - #23 — séparer l'exemple Timoté de la config active

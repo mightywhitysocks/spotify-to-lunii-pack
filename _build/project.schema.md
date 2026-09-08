@@ -115,7 +115,10 @@ Spoken-title clip finder (03_titles).
 
 The manual-override contract is unchanged: fill `start,end` (seconds into
 chapter 1) on a row of `title_windows.csv` and rerun — those values win and are
-never blanked by a full run.
+never blanked by a full run. The run is idempotent: an override row is re-cut
+only when its `start,end` differs from the `ov_start,ov_end` the script last cut
+from (bookkeeping columns, not meant to be edited); an unchanged override keeps
+the clip on disk just like a detected one.
 
 ## `icons`
 

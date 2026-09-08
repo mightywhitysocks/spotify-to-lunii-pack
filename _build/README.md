@@ -51,7 +51,7 @@ Ces chemins sont propres à chaque machine : ils ne vont jamais dans `project.js
 |---|---|---|
 | 1 | `01_inventory.ps1` | `inventory.csv`, `stories.json`, `categories.csv`. Regex / groupes / clé d'histoire / catégories / `discard` / préfixe de slug / extensions source : tout depuis `$Cfg`. Histoire non mappée → `uncategorized_name`. `categories` vide → `category=""` partout |
 | 2 | `02_merge.ps1` `[-Rebuild]` | `tree\…\<NN titre>.mp3` — chapitres fusionnés (rate / layout / codec / bitrate / silences depuis `$Cfg.audio` + `$Cfg.merge`) + `stories_tree.json`. **Réconcilie** (ne détruit pas le tree) : ré-utilise chaque clip déjà fusionné, le **déplace** dans son nouveau créneau (+ `.item.mp3` / `.item.png` / backup loudness). `-Rebuild` = tout re-fusionner. Menu à plat si `categories` vide. `base` (JSON) = slug stable, indépendant de la catégorie |
-| 3 | `03_titles.py` (`uv run --with faster-whisper`) | si `titles.mode="detect"` : `tree\…\<NN titre>.item.mp3` + `title_windows.csv` (éditable, `start,end` manuels **préservés**) + `titles_review.html`. Si `off` : CSV passthrough + page, aucun audio touché |
+| 3 | `03_titles.py` (`uv run --with faster-whisper`) | si `titles.mode="detect"` : `tree\…\<NN titre>.item.mp3` + `title_windows.csv` (éditable, `start,end` manuels **préservés** ; colonnes `ov_start,ov_end` = mémo de la fenêtre override déjà découpée, ne pas éditer) + `titles_review.html`. **Idempotent** : un clip déjà présent est conservé tel quel, override compris tant que `start,end` n'a pas bougé. Si `off` : CSV passthrough + page, aucun audio touché |
 | 4 | `04_menu_tts.py` (`uv … --with piper-tts`) | `tree\…\0-item.mp3` — `menu_prompts.root` → `tree/0-item.mp3`, `menu_prompts.category_chooser` → `<menu>/0-item.mp3`, `categories[].prompt` → `<menu>/<cat>/0-item.mp3`. Prompts de catégorie ignorés en menu à plat ; textes vides ignorés. Erreur claire si `tts.model` absent |
 | 4b | `04b_normalize.ps1` `[-Only <pat>] [-Fresh]` | `.mp3` du `tree` → `audio.target_lufs` / `audio.target_tp` + `normalize_report.csv` (delta before/after, fichiers traités uniquement). **Idempotent** : normalise depuis la copie pristine `work\raw_audio` ; chaque générateur (02/03/04) invalide ses propres backups |
 | 4d | `04d_report.ps1` | `audio_report.csv` — snapshot loudness complet + format `<sample_rate>,<channels>` de tout le `tree` (rapport canonique) |
@@ -73,9 +73,10 @@ Scripts abandonnés dans `scripts\_deprecated\`.
 
 1. Éditer `title_windows.csv` : mettre `start,end` (s, dans le chapitre 1) sur la
    ligne du slug. Ces valeurs **priment** sur la détection et sont **préservées**.
-2. `03_titles.py` — ne re-découpe que les lignes avec override ou listées dans
-   `TITLES_FORCE="slug;slug"` ; les autres clips sont **conservés tels quels**.
-   `TITLES_KEEP=0` force la re-détection complète.
+2. `03_titles.py` — re-découpe une ligne à override **seulement si son `start,end`
+   a changé** depuis le dernier run (comparé à `ov_start,ov_end`), ou si elle est
+   listée dans `TITLES_FORCE="slug;slug"`. Les autres clips sont **conservés tels
+   quels**. `TITLES_KEEP=0` force la re-détection complète.
 3. **Renormaliser les clips re-découpés** : `03_titles.py` affiche la commande
    exacte `04b_normalize.ps1 -Only '<fichier>',…`.
 4. `scripts\05_run_spg.ps1`.
