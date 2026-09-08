@@ -66,12 +66,15 @@ Ordered list. **Empty ⇒ flat single-level menu** (all stories directly under
 
 - `name` — the category folder under `tree/<menu_root_name>/`
 - `prompt` — TTS text for `tree/<menu_root_name>/<name>/0-item.mp3` (04_menu_tts)
-- `icon` — OpenMoji hex code for the category screen (07_icons, `icons.mode="emoji"`)
+- `icon` — icon identifier for the category screen (07_icons, `icons.mode="emoji"`):
+  a bare OpenMoji hex code (`"1F3E0"`, the default source) or `"<prefix>:<name>"`
+  for an extra library declared in `icons.sources` (e.g. `"material:museum"`)
 - `stories` — story keys assigned to this category
 
 ## `story_icons`
 
-`{ "<story key>": "<emoji hex>" }` — per-story OpenMoji code (07_icons).
+`{ "<story key>": "<icon identifier>" }` — per-story icon (07_icons), same
+identifier format as `categories[].icon` above.
 
 ## `menu_prompts` / `first_menu_audio_only`
 
@@ -103,10 +106,11 @@ never blanked by a full run.
 
 | key | default | meaning |
 |---|---|---|
-| `mode` | `"off"` | `"emoji"` = generate OpenMoji line icons; `"off"` = no-op (SPG renders text images) |
+| `mode` | `"off"` | `"emoji"` = generate line icons; `"off"` = no-op (SPG renders text images) |
 | `set` | `"black"` | OpenMoji set |
-| `url` | OpenMoji raw URL with `{set}` / `{code}` | icon source template |
+| `url` | OpenMoji raw URL with `{set}` / `{code}` | default icon source template (bare hex codes) |
 | `render_bg` | `"0xF6F3EC"` | reportlab raster background before negate |
+| `sources` | `{}` | extra icon libraries: `{"<prefix>": "<url template with {code}>"}`, referenced from `categories[].icon`/`story_icons` as `"<prefix>:<name>"` (e.g. `{"material": ".../{code}/materialsymbolsoutlined/{code}_24px.svg"}` used as `"material:museum"`). Cached under `_build/tools/icons/<prefix>/`, separate from the OpenMoji cache — no invalidation across sources or across `set` changes (see issue tracking cache staleness) |
 
 ## `covers`
 

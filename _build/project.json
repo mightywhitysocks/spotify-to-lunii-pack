@@ -82,7 +82,7 @@
     "va au cirque": "1F3AA",
     "va au spectacle": "1F3AD",
     "visite le louvre": "1F5BC",
-    "visite le musee d orsay": "1F3DB",
+    "visite le musee d orsay": "material:museum",
     "visite paris": "1F5FC",
     "visite un chateau fort": "1F3F0",
     "prend le train": "1F682",
@@ -124,7 +124,10 @@
     "mode": "emoji",
     "set": "black",
     "url": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/{set}/svg/{code}.svg",
-    "render_bg": "0xF6F3EC"
+    "render_bg": "0xF6F3EC",
+    "sources": {
+      "material": "https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/{code}/materialsymbolsoutlined/{code}_24px.svg"
+    }
   },
 
   "covers": {

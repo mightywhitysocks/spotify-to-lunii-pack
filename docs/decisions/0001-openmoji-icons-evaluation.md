@@ -3,6 +3,7 @@
 **Statut** : Accepté
 **Date** : 2026-09-08
 **Issue** : [#2](https://github.com/mightywhitysocks/spotify-to-lunii-pack/issues/2)
+**Complété par** : [0002-icones-ui-multi-bibliotheques.md](0002-icones-ui-multi-bibliotheques.md) (la ligne `1F3DB` du tableau ci-dessous est supersédée par cette décision ultérieure ; le reste de ce document reste valide tel quel)
 
 ## Contexte
 
