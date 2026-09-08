@@ -11,7 +11,9 @@
   03_titles + 04_menu_tts delete what they re-wrote), so a plain re-run is safe.
   -Only '<pat>'  restricts to files whose relative path matches; -Fresh is a
   paranoia reset that rebuilds every backup from the current tree.
-  Outputs: audio_report.csv
+  Outputs: normalize_report.csv (before/after delta, processed files only).
+  The canonical full loudness/format snapshot is audio_report.csv, written by
+  04d_report.ps1.
 #>
 param([switch]$Fresh, [string[]]$Only)
 $ErrorActionPreference = 'Stop'
@@ -68,7 +70,7 @@ $report = foreach ($f in $files) {
         lufs_after  = $after.I;  peak_after  = $after.TP
     }
 }
-$report | Export-Csv -LiteralPath (Join-Path $build 'audio_report.csv') -NoTypeInformation -Encoding UTF8
+$report | Export-Csv -LiteralPath (Join-Path $build 'normalize_report.csv') -NoTypeInformation -Encoding UTF8
 $la = [double[]]($report.lufs_after | Where-Object { $_ -ne $null })
 Write-Host ("`nOK - LUFS apres : min={0:N1} max={1:N1} moy={2:N1}  (cible {3})" -f `
     ($la|measure -min).Minimum, ($la|measure -max).Maximum, ($la|measure -average).Average, $tLufs)
