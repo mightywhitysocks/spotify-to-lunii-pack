@@ -63,7 +63,7 @@ et **[`_build/project.schema.md`](_build/project.schema.md)**.
 
 ## Prérequis (non versionnés)
 
-- [`studio-pack-generator`](https://github.com/jersou/studio-pack-generator) → `_build/tools/spg/` (ou sur le PATH)
+- [`studio-pack-generator`](https://github.com/jersou/studio-pack-generator) v0.5.15 → `pwsh _build/scripts/get_spg.ps1` (télécharge + vérifie le SHA-256 + dézippe dans `_build/tools/spg/`) ; ou sur le PATH
 - [Piper](https://github.com/rhasspy/piper) + une voix `.onnx` → `tts.model`
 - `faster-whisper` et `ffmpeg-normalize` via [`uv`](https://github.com/astral-sh/uv)
 - `ffmpeg` / `ffprobe`

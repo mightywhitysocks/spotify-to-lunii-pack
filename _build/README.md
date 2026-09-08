@@ -35,7 +35,7 @@ défaut, le menu est à plat tant que `categories` est vide.
 
 | Outil | Rôle | clé `tools` |
 |---|---|---|
-| studio-pack-generator (binaire, ffmpeg + ImageMagick embarqués) | dossier → pack `.zip` Lunii, images de titre, `story.json`, zip | `spg` |
+| studio-pack-generator (binaire, ffmpeg + ImageMagick embarqués) | dossier → pack `.zip` Lunii, images de titre, `story.json`, zip | `spg` (`scripts/get_spg.ps1`) |
 | Piper + voix `.onnx` | TTS des prompts de menu | via `tts.model` |
 | faster-whisper via `uv` | transcription pour localiser l'annonce du titre | `uv` |
 | ffmpeg-normalize via `uv` | normalisation loudness EBU R128 | `uv` |
@@ -46,6 +46,11 @@ binaires vendored sous `_build/tools/**` (utile juste après un clone, sans
 `project.local.json`) ; l'auto-détection de SPG accepte le suffixe de plateforme
 (`-x86_64-windows`, `-x86_64-linux`, `-aarch64-macos`, …). Une valeur relative
 est résolue par rapport à `_build/`.
+
+`scripts/get_spg.ps1` télécharge la version épinglée de studio-pack-generator
+(v0.5.15) depuis les releases GitHub de `jersou/studio-pack-generator`, vérifie
+son SHA-256 et la dézippe dans `_build/tools/spg/` — là où l'auto-détection la
+trouve. Piper et le modèle whisper sont récupérés à la volée par `uv`.
 
 Ces chemins sont propres à chaque machine : ils ne vont jamais dans `project.json`
 (committé), mais dans `_build/project.local.json` — gitignoré, copié depuis

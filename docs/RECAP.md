@@ -14,12 +14,12 @@ Un correctif = un commit poussé sur `main`.
 | #18 | Auto-suggérer l'emoji d'une histoire depuis son titre | Classée (not planned) conformément à la décision attendue dans l'issue : table mots-clés→emoji à maintenir + fuzzy-matching = ROI négatif vs 45 lignes écrites une fois. | — |
 | #23 | Séparer l'exemple Timoté de la config active | `_build/project.json` sorti du suivi git (gitignoré) = copie de travail. `git mv` de l'ancien contenu vers `_build/examples/timote.json` (exemple committé de référence). Loaders : fallback `project.json` → `project.example.json` pour un clone frais. README (racine + `_build`) + `project.schema.md` à jour. | _(ce commit)_ |
 
-| #8 | Validation de `project.json` (clés requises, enums de mode, schéma) | Validation légère dans les deux loaders (option recommandée par l'issue) : `*.mode` / `tts.engine` hors énumération → arrêt avec message ; clé inconnue (récursive, hors maps free-form) → warning. `sources` ajouté à `$Defaults.icons` (drift PS/Python corrigé au passage). README + `project.schema.md` à jour. | _(ce commit)_ |
+| #8 | Validation de `project.json` (clés requises, enums de mode, schéma) | Validation légère dans les deux loaders (option recommandée par l'issue) : `*.mode` / `tts.engine` hors énumération → arrêt avec message ; clé inconnue (récursive, hors maps free-form) → warning. `sources` ajouté à `$Defaults.icons` (drift PS/Python corrigé au passage). README + `project.schema.md` à jour. | `d57ea64` |
+| #13 | Homogénéiser fail-soft / fail-loud | Classée (not planned) : aucun échec silencieux concret non traité (icônes → #30, typo config → #8, outils manquants déjà fail-loud). | — |
+| #20 | Script de récupération de studio-pack-generator (version épinglée + checksum) | `scripts/get_spg.ps1` : SPG v0.5.15 depuis les releases `jersou/studio-pack-generator`, SHA-256 épinglé par plateforme (digests GitHub), dézip dans `_build/tools/spg/`. Détection de plateforme, `-Force`, no-op si déjà présent. Testé bout-en-bout (download + checksum + extraction, 5 s). README racine + `_build`. | _(ce commit)_ |
 
 ## À suivre (ordre prévu, du plus simple au plus complexe)
 
-- #13 — homogénéiser fail-soft / fail-loud
-- #20 — script de récupération de studio-pack-generator
 - #3 / #6 — revue et complément de documentation
 
 ## Écartées pour l'instant
