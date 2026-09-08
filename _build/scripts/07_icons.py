@@ -16,7 +16,7 @@ Then re-run 05_run_spg.ps1.
 """
 import json, urllib.request
 from pathlib import Path
-from _config import CONFIG, BUILD, TREE, MENU, FFMPEG, require_tool
+from _config import CONFIG, BUILD, TREE, MENU, FFMPEG, require_tool, resolve_tree_path
 from _covers import place_on_canvas
 
 ICONS = CONFIG["icons"]
@@ -129,7 +129,7 @@ def main():
             print(f"  ?? pas d'icone pour '{key}' ({st['title']})")
             miss += 1
             continue
-        if compose(code, Path(st["item_png"])):
+        if compose(code, resolve_tree_path(st["item_png"])):
             ok += 1
             print(f"  {code}  {st['title']}")
         else:

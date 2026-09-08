@@ -195,3 +195,18 @@ def bak_name(p) -> str:
     Mirror of BakName in _config.ps1 -- keep the two in sync."""
     p = Path(p)
     return f"{p.parent.name}__{p.name}"
+
+
+def resolve_tree_path(raw) -> Path:
+    """Re-anchor a path stored in stories_tree.json under the local TREE.
+
+    02_merge.ps1 writes absolute paths (Windows backslashes included) as seen
+    on whatever machine ran it -- meaningless on any other machine/platform.
+    Keep only the portion after the 'tree' folder segment (present in every
+    such path, since it's TREE's own fixed name) and rebuild it under the
+    local TREE, regardless of the separator or platform it was written with.
+    """
+    parts = [p for p in re.split(r"[\\/]+", str(raw)) if p]
+    if "tree" in parts:
+        parts = parts[parts.index("tree") + 1:]
+    return TREE.joinpath(*parts)
