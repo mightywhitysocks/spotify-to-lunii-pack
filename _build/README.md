@@ -58,7 +58,7 @@ Ces chemins sont propres à chaque machine : ils ne vont jamais dans `project.js
 | 8e | `08e_grayscale.py` | `covers/gray/<slug>.png` — recadré (`covers.crop_top` / `crop_bottom`), gris + CLAHE + contraste, `image.w`×`image.h`. Réglages : `cover_tune.csv` |
 | 8f | `08f_apply.py` | copie les couvertures gris sur les écrans d'histoire (`style=icon` dans `cover_tune.csv` = garder le pictogramme) |
 | 7b | `07b_icons_page.py` | `icons_review.html` — galerie de toutes les images (gère le menu à plat) |
-| 5 | `05_run_spg.ps1` | `<title>.zip`. Flags `--skip-*` dérivés : `--skip-audio-convert --skip-audio-item-gen` toujours (on fournit l'audio normalisé) ; `--skip-image-item-gen --skip-extract-image-from-mp-3` seulement si le projet produit ses images (icônes / pochettes / cover). Sinon SPG génère ses propres images de texte |
+| 5 | `05_run_spg.ps1` | `<title>.zip`. Flags `--skip-*` dérivés : `--skip-audio-convert --skip-audio-item-gen` toujours (on fournit l'audio normalisé) ; `--skip-extract-image-from-mp-3` si le projet produit ses images ; `--skip-image-item-gen` en plus **seulement** si `work/icons_report.json` confirme 100 % de couverture d'icônes (sinon SPG rend un écran texte de secours pour chaque icône manquante) |
 | 5b | `05b_check_story.py [pack.zip\|dossier]` | contrôle d'intégrité du `story.json` du pack (`<build>/<title>.zip` par défaut) : point d'entrée unique, `controlSettings` complet sur chaque nœud, chaque nœud a son audio, refs d'assets (audio/image) résolues dans le pack, transitions (`okTransition`/`homeTransition`) valides, aucun nœud orphelin. Exit 1 si un problème est trouvé |
 | 6 | `06_review_page.py` | `titles_review.html` autonome (audio embarqué) |
 
