@@ -71,7 +71,7 @@ $Defaults = @{
                 trim_detection = 'peak'; trim_pad = 0.14 }
     icons  = @{ mode = 'off'; set = 'black';
                 url = 'https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/{set}/svg/{code}.svg';
-                render_bg = '0xF6F3EC' }
+                render_bg = '0xF6F3EC'; sources = @{} }
     covers = @{ mode = 'off'; bad_album = ''; good_artist = ''; crop_top = 0.30; crop_bottom = 0.16 }
     pack_cover = @{ mode = 'none'; src = ''; bg = 'srgb(52,60,132)'; fuzz = '22%' }
     image  = @{ canvas = '#0A0D12'; w = 320; h = 240; fit = 232 }
@@ -85,6 +85,52 @@ $SpgNames = @(
     'studio-pack-generator-x86_64-linux', 'studio-pack-generator-aarch64-linux',
     'studio-pack-generator-x86_64-macos', 'studio-pack-generator-aarch64-macos'
 )
+
+# <section>.<key> -> allowed values. A typo (mode: "detetc") otherwise silently
+# no-ops a whole stage. Mirror of _MODE_ENUMS in _config.py -- keep in sync.
+$ModeEnums = @{
+    'titles.mode'     = @('detect', 'off')
+    'icons.mode'      = @('emoji', 'off')
+    'covers.mode'     = @('spotify', 'off')
+    'pack_cover.mode' = @('none', 'image', 'floodfill')
+    'tts.engine'      = @('piper')
+}
+$FreeformKeys = @('discard', 'story_icons', 'synonyms', 'sources')   # user data, not schema
+
+function Get-UnknownKeys($user, $defaults, [string]$prefix = '') {
+    if ($user -isnot [hashtable] -or $defaults -isnot [hashtable]) { return @() }
+    $out = @()
+    foreach ($k in $user.Keys) {
+        $path = "$prefix$k"
+        if (-not $defaults.ContainsKey($k)) { $out += $path }
+        elseif ($FreeformKeys -notcontains $k) {
+            $out += Get-UnknownKeys $user[$k] $defaults[$k] "$path."
+        }
+    }
+    return $out
+}
+
+function Assert-ConfigValid($cfg, $raw, [string]$srcName) {
+    $bad = @()
+    foreach ($kv in $ModeEnums.GetEnumerator()) {
+        $s, $key = $kv.Key -split '\.', 2
+        $val = if ($cfg[$s] -is [hashtable]) { $cfg[$s][$key] } else { $null }
+        if ($kv.Value -notcontains $val) {
+            $bad += "$($kv.Key) = '$val' (attendu : $($kv.Value -join ', '))"
+        }
+    }
+    # a single-element JSON array comes back unwrapped from ConvertFrom-Json, so
+    # only the unambiguous mistake (an object where a list is expected) is caught.
+    foreach ($k in @('categories', 'source_ext')) {
+        if ($cfg[$k] -is [hashtable]) { $bad += "$k doit etre une liste JSON, pas un objet" }
+    }
+    if ($bad) {
+        throw "project.json invalide ($srcName) :`n  - " + ($bad -join "`n  - ")
+    }
+    foreach ($path in (Get-UnknownKeys $raw $Defaults)) {
+        Write-Warning "project.json : cle inconnue ignoree -> $path"
+    }
+}
 
 # ---- load + merge --------------------------------------------------------
 # PACK_CONFIG wins; else project.json (gitignored -- the active pack); else the
@@ -103,10 +149,13 @@ $Cfg = Merge-Config $Defaults $user
 # always at _build\project.local.json regardless of PACK_CONFIG. See
 # project.local.json.example. Mirror of _config.py -- keep the two in sync.
 $localCfgPath = Join-Path $BuildDir 'project.local.json'
+$raw = $user
 if (Test-Path -LiteralPath $localCfgPath) {
     $local = Get-Content -LiteralPath $localCfgPath -Raw | ConvertFrom-Json -AsHashtable
     $Cfg = Merge-Config $Cfg $local
+    $raw = Merge-Config $raw $local
 }
+Assert-ConfigValid $Cfg $raw (Split-Path $cfgPath -Leaf)
 if (-not $Cfg.menu_root_name) { $Cfg.menu_root_name = ConvertTo-Slug $Cfg.title }
 
 # ---- tool resolution ----------------------------------------------------

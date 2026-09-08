@@ -117,6 +117,50 @@ def _deep_merge(base, over):
     return over
 
 
+# <section>.<key> -> allowed values. A typo here (mode: "detetc") otherwise
+# silently no-ops a whole stage with no error. Mirror of $ModeEnums in _config.ps1.
+_MODE_ENUMS = {
+    ("titles", "mode"): {"detect", "off"},
+    ("icons", "mode"): {"emoji", "off"},
+    ("covers", "mode"): {"spotify", "off"},
+    ("pack_cover", "mode"): {"none", "image", "floodfill"},
+    ("tts", "engine"): {"piper"},
+}
+# dicts whose keys are user data, not schema -- don't flag their keys as unknown
+_FREEFORM = {"discard", "story_icons", "synonyms", "sources"}
+
+
+def _unknown_keys(user, defaults, prefix=""):
+    """Paths present in the user config but absent from DEFAULTS (typo catcher)."""
+    if not isinstance(user, dict) or not isinstance(defaults, dict):
+        return []
+    out = []
+    for k, v in user.items():
+        path = prefix + k
+        if k not in defaults:
+            out.append(path)
+        elif k not in _FREEFORM:
+            out += _unknown_keys(v, defaults[k], path + ".")
+    return out
+
+
+def _validate(cfg, raw_keys_source):
+    """Fail loud on an impossible enum value; warn on an unknown key."""
+    bad = []
+    for (section, key), allowed in _MODE_ENUMS.items():
+        val = cfg.get(section, {}).get(key)
+        if val not in allowed:
+            bad.append(f"{section}.{key} = {val!r} (attendu : {sorted(allowed)})")
+    for k in ("categories", "source_ext"):
+        if not isinstance(cfg.get(k), list):
+            bad.append(f"{k} doit être une liste JSON")
+    if bad:
+        raise SystemExit(f"project.json invalide ({_config_path().name}) :\n  - "
+                         + "\n  - ".join(bad))
+    for path in _unknown_keys(raw_keys_source, DEFAULTS):
+        print(f"!! project.json : clé inconnue ignorée -> {path}", flush=True)
+
+
 def _config_path() -> Path:
     """PACK_CONFIG wins; else _build/project.json (gitignored -- the active pack);
     else the committed generic example, so a fresh checkout still loads. The
@@ -139,9 +183,12 @@ def _load():
     # always at _build/project.local.json regardless of PACK_CONFIG. See
     # project.local.json.example.
     local_path = BUILD / "project.local.json"
+    raw = dict(user)
     if local_path.exists():
         local = json.loads(local_path.read_text(encoding="utf-8"))
         cfg = _deep_merge(cfg, local)
+        raw = _deep_merge(raw, local)
+    _validate(cfg, raw)
     if not cfg.get("menu_root_name"):
         cfg["menu_root_name"] = slugify(cfg["title"])
     if not cfg["tts"].get("lead"):

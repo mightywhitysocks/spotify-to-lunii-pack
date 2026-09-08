@@ -16,7 +16,9 @@ overrides machine — voir « Outils » ci-dessous), résolvent les chemins d'ou
 un binaire vendored sous `_build/tools/**` → sinon erreur explicite) et exposent
 un objet unique `$Cfg` / `CONFIG`. Les noms
 historiques (`$Cfg.build` / `.tree` / `.src` / `.ffmpeg` … et `BUILD` / `TREE` /
-`FFMPEG` …) sont dérivés de la config.
+`FFMPEG` …) sont dérivés de la config. Le loader **valide** au chargement : un
+`*.mode` / `tts.engine` hors énumération (`"detetc"`) **arrête** avec un message
+clair ; une clé inconnue (`titles.mod`) est signalée puis ignorée.
 
 - **Toutes les clés** : [`project.schema.md`](project.schema.md)
 - **Exemple minimal générique** : [`project.example.json`](project.example.json)

@@ -14,6 +14,11 @@ worked example (the Timoté pack); `cp examples/timote.json project.json` to
 rebuild it. `_build/project.example.json` is a minimal generic template and the
 fallback for a fresh checkout.
 
+Both loaders validate on load: an out-of-range `*.mode` / `tts.engine`
+(`"detetc"`) **aborts** with a clear message; an unknown key (`titles.mod`,
+`categorie`) prints a warning and is ignored. Free-form maps (`discard`,
+`story_icons`, `titles.synonyms`, `icons.sources`) are not key-checked.
+
 ## Top level
 
 | key | default | meaning |
