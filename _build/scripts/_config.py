@@ -1,6 +1,7 @@
 """Config loader for the pack build scripts (single source of truth).
 
-Locate the project file (env ``PACK_CONFIG`` wins, else ``_build/project.json``),
+Locate the project file (env ``PACK_CONFIG`` wins, else the gitignored
+``_build/project.json``, else the committed ``_build/project.example.json``),
 deep-merge it over the built-in DEFAULTS, resolve every tool path (config value ->
 else ``shutil.which`` on PATH -> else a clear error when the tool is actually used)
 and expose a single ``CONFIG`` dict.
@@ -117,8 +118,15 @@ def _deep_merge(base, over):
 
 
 def _config_path() -> Path:
+    """PACK_CONFIG wins; else _build/project.json (gitignored -- the active pack);
+    else the committed generic example, so a fresh checkout still loads. The
+    Timoté reference config lives at _build/examples/timote.json -- copy it onto
+    project.json to rebuild that pack."""
     env = os.environ.get("PACK_CONFIG")
-    return Path(env) if env else BUILD / "project.json"
+    if env:
+        return Path(env)
+    p = BUILD / "project.json"
+    return p if p.exists() else BUILD / "project.example.json"
 
 
 def _load():

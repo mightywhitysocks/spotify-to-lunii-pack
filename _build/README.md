@@ -7,7 +7,9 @@ partir des fichiers audio de `source_dir` (jamais modifiés).
 
 `scripts/_config.ps1` (dot-source) et `scripts/_config.py` (import) sont des
 **loaders** : ils localisent le fichier de config (env `PACK_CONFIG`, sinon
-`_build/project.json`), le fusionnent en profondeur par-dessus des valeurs par
+`_build/project.json` — gitignoré, la config active — sinon
+`_build/project.example.json` committé, pour qu'un clone frais démarre quand
+même), le fusionnent en profondeur par-dessus des valeurs par
 défaut, fusionnent par-dessus `_build/project.local.json` s'il existe (gitignoré,
 overrides machine — voir « Outils » ci-dessous), résolvent les chemins d'outils
 (valeur de config → sinon `Get-Command` / `shutil.which` sur le PATH → sinon
@@ -18,8 +20,10 @@ historiques (`$Cfg.build` / `.tree` / `.src` / `.ffmpeg` … et `BUILD` / `TREE`
 
 - **Toutes les clés** : [`project.schema.md`](project.schema.md)
 - **Exemple minimal générique** : [`project.example.json`](project.example.json)
-- **Exemple réel complet** : [`project.json`](project.json) (projet « Timoté » —
-  99 MP3 → 45 histoires → 9 thèmes)
+- **Exemple réel complet** : [`examples/timote.json`](examples/timote.json) (projet
+  « Timoté » — 99 MP3 → 45 histoires → 9 thèmes). `cp examples/timote.json
+  project.json` pour (re)construire ce pack ; `project.json` est ta copie de
+  travail, jamais committée.
 
 Une config quasi vide (`{"title": "…", "source_dir": ".."}`) produit déjà un pack
 à plat cohérent : `titles` / `icons` / `covers` / `pack_cover` sont `off` par

@@ -3,7 +3,8 @@
 
   Dot-source at the top of every *.ps1:   . "$PSScriptRoot\_config.ps1"
 
-  Locates the project file (env PACK_CONFIG wins, else _build\project.json),
+  Locates the project file (env PACK_CONFIG wins, else the gitignored
+  _build\project.json, else the committed _build\project.example.json),
   deep-merges it over the built-in DEFAULTS, resolves every tool path
   (config value -> else Get-Command on PATH -> else a clear error), and exposes
   a single $Cfg hashtable. The whole merged config is on $Cfg (e.g.
@@ -86,7 +87,12 @@ $SpgNames = @(
 )
 
 # ---- load + merge --------------------------------------------------------
-$cfgPath = if ($env:PACK_CONFIG) { $env:PACK_CONFIG } else { Join-Path $BuildDir 'project.json' }
+# PACK_CONFIG wins; else project.json (gitignored -- the active pack); else the
+# committed generic example, so a fresh checkout still loads. The Timoté
+# reference config is _build\examples\timote.json -- copy it onto project.json.
+$cfgPath = if ($env:PACK_CONFIG) { $env:PACK_CONFIG }
+           elseif (Test-Path -LiteralPath (Join-Path $BuildDir 'project.json')) { Join-Path $BuildDir 'project.json' }
+           else { Join-Path $BuildDir 'project.example.json' }
 $user = @{}
 if (Test-Path -LiteralPath $cfgPath) {
     $user = Get-Content -LiteralPath $cfgPath -Raw | ConvertFrom-Json -AsHashtable

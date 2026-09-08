@@ -2,14 +2,17 @@
 
 The **single source of truth** for a pack build. `scripts/_config.ps1`
 (dot-source) and `scripts/_config.py` (import) locate it (env `PACK_CONFIG`
-wins, else `_build/project.json`), deep-merge it over the built-in DEFAULTS,
-then deep-merge `_build/project.local.json` on top if present (gitignored,
-machine-specific — see `tools` below), and expose one `$Cfg` / `CONFIG`
-object. Every key below is optional: a near-empty file
+wins, else `_build/project.json`, else `_build/project.example.json`), deep-merge
+it over the built-in DEFAULTS, then deep-merge `_build/project.local.json` on top
+if present (gitignored, machine-specific — see `tools` below), and expose one
+`$Cfg` / `CONFIG` object. Every key below is optional: a near-empty file
 (`{"title": "...", "source_dir": ".."}`) already builds a sane flat pack.
 
-`_build/project.json` (Timoté) is the worked example; `_build/project.example.json`
-is a minimal generic template.
+`_build/project.json` is the **active** config and is **gitignored** — edit it
+freely without polluting the repo. `_build/examples/timote.json` is the committed
+worked example (the Timoté pack); `cp examples/timote.json project.json` to
+rebuild it. `_build/project.example.json` is a minimal generic template and the
+fallback for a fresh checkout.
 
 ## Top level
 
@@ -172,11 +175,12 @@ Needs `_build/.spotify` (`CLIENT_ID=…` / `CLIENT_SECRET=…`, git-ignored).
 ## `tools`
 
 All optional — a blank value is auto-discovered on `PATH`
-(`Get-Command` / `shutil.which`), else the script fails with a clear message.
+(`Get-Command` / `shutil.which`), then among the vendored binaries under
+`_build/tools/**`, else the script fails with a clear message.
 A relative value is resolved against `_build/`.
 
-Machine-specific, so it never lives in the committed `project.json` (or
-`project.example.json`): put it in `_build/project.local.json` instead — a
+Machine-specific, so it never lives in a committed config (`examples/timote.json`
+or `project.example.json`): put it in `_build/project.local.json` instead — a
 gitignored file, deep-merged on top of `project.json` by both loaders. Copy
 `project.local.json.example` to get started.
 

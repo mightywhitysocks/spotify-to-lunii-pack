@@ -56,3 +56,6 @@ Thumbs.db
 .DS_Store
 desktop.ini
 *.log
+
+# --- Active pack config (worked example lives at _build/examples/timote.json) ---
+_build/project.json

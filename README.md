@@ -7,7 +7,9 @@ par thèmes ou menu à plat, annonces de titre découpées automatiquement, prom
 de menu en TTS, pictogrammes, pochettes.
 
 Tout ce qui est spécifique à un projet vit dans **un seul fichier de config**,
-`_build/project.json`. Les scripts ne contiennent plus aucune valeur en dur.
+`_build/project.json` (gitignoré, ta copie de travail ; l'exemple committé de
+référence est `_build/examples/timote.json`). Les scripts ne contiennent plus
+aucune valeur en dur.
 
 > Ce dépôt ne contient **que le code et la configuration**. Les fichiers audio,
 > les images, les binaires d'outils et le pack généré sont exclus (`.gitignore`).
