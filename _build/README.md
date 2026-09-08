@@ -11,7 +11,8 @@ partir des fichiers audio de `source_dir` (jamais modifiés).
 défaut, fusionnent par-dessus `_build/project.local.json` s'il existe (gitignoré,
 overrides machine — voir « Outils » ci-dessous), résolvent les chemins d'outils
 (valeur de config → sinon `Get-Command` / `shutil.which` sur le PATH → sinon
-erreur explicite) et exposent un objet unique `$Cfg` / `CONFIG`. Les noms
+un binaire vendored sous `_build/tools/**` → sinon erreur explicite) et exposent
+un objet unique `$Cfg` / `CONFIG`. Les noms
 historiques (`$Cfg.build` / `.tree` / `.src` / `.ffmpeg` … et `BUILD` / `TREE` /
 `FFMPEG` …) sont dérivés de la config.
 
@@ -34,9 +35,11 @@ défaut, le menu est à plat tant que `categories` est vide.
 | ffmpeg-normalize via `uv` | normalisation loudness EBU R128 | `uv` |
 | ffmpeg / ffprobe | fusion, mesures, découpes | `ffmpeg` / `ffprobe` |
 
-Chaque clé `tools` vide est auto-détectée sur le PATH ; l'auto-détection de SPG
-accepte le suffixe de plateforme (`-x86_64-windows`, `-x86_64-linux`,
-`-aarch64-macos`, …). Une valeur relative est résolue par rapport à `_build/`.
+Chaque clé `tools` vide est auto-détectée d'abord sur le PATH, puis parmi les
+binaires vendored sous `_build/tools/**` (utile juste après un clone, sans
+`project.local.json`) ; l'auto-détection de SPG accepte le suffixe de plateforme
+(`-x86_64-windows`, `-x86_64-linux`, `-aarch64-macos`, …). Une valeur relative
+est résolue par rapport à `_build/`.
 
 Ces chemins sont propres à chaque machine : ils ne vont jamais dans `project.json`
 (committé), mais dans `_build/project.local.json` — gitignoré, copié depuis

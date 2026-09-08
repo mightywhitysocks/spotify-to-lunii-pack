@@ -152,9 +152,25 @@ CANVAS = CONFIG["image"]["canvas"]
 RAW_AUDIO = BUILD / "work" / "raw_audio"                  # 04b_normalize's loudness backups
 
 
+def _find_vendored(names):
+    """Scan ``_build/tools/**`` for a file whose name is one of ``names`` --
+    vendored, unpacked binaries that were never added to PATH (see
+    ``project.local.json.example``). Returns the first match (sorted) or None.
+    Mirror of the same fallback in _config.ps1 -- keep the two in sync."""
+    tools_dir = BUILD / "tools"
+    if not tools_dir.is_dir():
+        return None
+    wanted = {n.lower() for n in names}
+    for p in sorted(tools_dir.rglob("*")):
+        if p.name.lower() in wanted and p.is_file():
+            return str(p)
+    return None
+
+
 def _resolve_tool(key, *path_names):
     """config value (absolute, or relative to _build/) -> else PATH lookup on
-    *path_names -> else the bare name (a later call fails with a clear OS error)."""
+    *path_names -> else a vendored copy under _build/tools/** -> else the bare
+    name (a later call fails with a clear OS error)."""
     val = (CONFIG["tools"].get(key) or "").strip()
     if val:
         p = Path(val)
@@ -165,6 +181,9 @@ def _resolve_tool(key, *path_names):
         found = shutil.which(name)
         if found:
             return found
+    vendored = _find_vendored(path_names)
+    if vendored:
+        return vendored
     return path_names[0] if path_names else key
 
 
