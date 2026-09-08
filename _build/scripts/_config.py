@@ -39,7 +39,10 @@ DEFAULTS = {
         "sample_rate": 44100, "channels": 1, "codec": "libmp3lame",
         "bitrate": "256k", "target_lufs": -16, "target_tp": -1.5,
     },
-    "merge": {"lead": 0.3, "tail": 0.6, "gap": 0.8, "trim_silence_db": -50},
+    "merge": {"lead": 0.3, "tail": 0.6, "gap": 0.8,
+              "trim_head_db": -45, "trim_head_window": 0.3,
+              "trim_tail_db": -45, "trim_tail_window": 0.3,
+              "trim_detection": "rms", "trim_pad": 0.1},
     "filename_pattern": r"^(?P<num>\d+)[\s._-]+(?P<title>.+)$",
     "num_group": "num",
     "chapter_group": "chapter",
@@ -58,6 +61,9 @@ DEFAULTS = {
         "strip_key_word": "",
         "clip_bitrate": "192k",
         "lead": 0.15, "fade_out": 0.26, "vad_l": 0.40, "vad_r": 0.28,
+        "trim_head_db": -48, "trim_head_window": 0.18,
+        "trim_tail_db": -45, "trim_tail_window": 0.08,
+        "trim_detection": "peak", "trim_pad": 0.14,
     },
     "icons": {
         "mode": "off",             # "emoji" | "off"

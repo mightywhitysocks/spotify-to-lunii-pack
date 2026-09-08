@@ -47,9 +47,18 @@ Timoté: `^(?P<num>\d+) Timoté - (?:Chapitre (?P<chapter>\d+) - )?(?P<title>.+?
 | `sample_rate` | `44100` | | `lead` | `0.3` (s of silence before the first chapter) |
 | `channels` | `1` | | `tail` | `0.6` (s after the last) |
 | `codec` | `"libmp3lame"` | | `gap` | `0.8` (s between chapters) |
-| `bitrate` | `"256k"` | | `trim_silence_db` | `-50` (edge-silence threshold) |
-| `target_lufs` | `-16` (04b_normalize) | | | |
-| `target_tp` | `-1.5` (04b_normalize, dBTP) | | | |
+| `bitrate` | `"256k"` | | `trim_head_db` / `trim_head_window` | `-45` / `0.3` (start-of-story edge) |
+| `target_lufs` | `-16` (04b_normalize) | | `trim_tail_db` / `trim_tail_window` | `-45` / `0.3` (end-of-story edge) |
+| `target_tp` | `-1.5` (04b_normalize, dBTP) | | `trim_detection` | `"rms"` (`peak`/`rms`, ffmpeg `silenceremove`) |
+| | | | `trim_pad` | `0.1` (guard band kept after each trim) |
+
+### Trim de silence — vocabulaire partagé `merge.*` / `titles.*`
+
+`02_merge.ps1` et `03_titles.py::cut_clip()` sont les deux seuls endroits du pipeline qui trimment du silence (`ffmpeg silenceremove`), et partagent depuis ce changement le même schéma de 6 clés — `trim_head_db`/`trim_head_window` (bord de tête), `trim_tail_db`/`trim_tail_window` (bord de fin), `trim_detection` (`peak` ou `rms`), `trim_pad` (durée de silence rajoutée après la coupe, une marge de sécurité pour ne jamais empiéter sur la parole réelle — technique dite du "guard band"). Chaque script garde ses propres valeurs par défaut, adaptées à son usage (voir `## titles` ci-dessous pour celles de `titles.*`).
+
+**Changement de sémantique (issue #4)** : jusqu'ici, `02_merge.ps1` appliquait son seuil de silence à **chaque bord de chaque chapitre**, y compris les jonctions internes entre deux chapitres d'une même histoire — ce qui pouvait manger la première syllabe d'un chapitre suivant. Désormais, `trim_head_*`/`trim_tail_*` ne s'appliquent plus qu'aux **deux bords externes de l'histoire fusionnée** (tout début du premier chapitre, toute fin du dernier) ; les jonctions internes ne sont plus jamais silence-trimmées — elles restent séparées par `gap` (silence numérique pur, inchangé), ce qui suffit à éviter tout clic audible.
+
+`trim_detection` reste sur `"rms"` (comportement ffmpeg par défaut, inchangé) plutôt que `"peak"` : la documentation ffmpeg et la littérature sur la détection d'activité vocale ne convergent pas clairement sur lequel des deux modes évite le mieux de couper une syllabe douce (consonnes fricatives f/s/ch) — changer ce réglage sans preuve n'était pas justifié. Le paramètre reste exposé pour qui veut tester `"peak"` à l'oreille sur ses propres fichiers.
 
 ## `discard`
 
@@ -99,6 +108,10 @@ Spoken-title clip finder (03_titles).
 | `lead` | `0.15` | clean silence prepended to every clip |
 | `fade_out` | `0.26` | fade-out length (start is never faded) |
 | `vad_l` / `vad_r` | `0.40` / `0.28` | pad left/right of the matched span |
+| `trim_head_db` / `trim_head_window` | `-48` / `0.18` | start-of-clip edge trim (see "Trim de silence" under `## audio / merge` — same vocabulary, own defaults) |
+| `trim_tail_db` / `trim_tail_window` | `-45` / `0.08` | end-of-clip edge trim |
+| `trim_detection` | `"peak"` | `peak`/`rms`, ffmpeg `silenceremove` |
+| `trim_pad` | `0.14` | guard band kept after each trim |
 
 The manual-override contract is unchanged: fill `start,end` (seconds into
 chapter 1) on a row of `title_windows.csv` and rerun — those values win and are
