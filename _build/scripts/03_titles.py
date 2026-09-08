@@ -36,6 +36,12 @@ VAD_L, VAD_R = float(T["vad_l"]), float(T["vad_r"])   # generous pad around the 
 LEAD_SIL = float(T["lead"])                           # clean silence prepended to every clip
 FOUT = float(T["fade_out"])                           # fade-out only (never eat the attack)
 CLIP_BR = str(T["clip_bitrate"])
+# silence-trim settings, same {head,tail}_{db,window} + detection + pad vocabulary as $Cfg.merge
+# (db kept as-is, not float()-cast, so e.g. -48 prints "-48dB" not "-48.0dB")
+TRIM_HEAD_DB, TRIM_HEAD_WIN = T["trim_head_db"], float(T["trim_head_window"])
+TRIM_TAIL_DB, TRIM_TAIL_WIN = T["trim_tail_db"], float(T["trim_tail_window"])
+TRIM_DETECTION = str(T["trim_detection"])
+TRIM_PAD = float(T["trim_pad"])
 SYN = {str(k): str(v) for k, v in (T.get("synonyms") or {}).items()}
 FUZZ = bool(T.get("fuzzy_first_word"))
 
@@ -60,12 +66,14 @@ def cut_clip(src, ss, dur, out, trim_lead):
     """Extract [ss, ss+dur] from src -> target rate/layout mp3:
     gentle silence trim, fade-OUT only, then prepend LEAD_SIL of clean silence."""
     sr = ("aformat=channel_layouts=%s,aresample=%d," % (CL, SR)
-          + ("silenceremove=start_periods=1:start_threshold=-48dB:start_silence=0.18:detection=peak,"
+          + (f"silenceremove=start_periods=1:start_threshold={TRIM_HEAD_DB}dB:"
+             f"start_silence={TRIM_HEAD_WIN}:detection={TRIM_DETECTION},"
              if trim_lead else "")
           + "areverse,"
-          "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.08:detection=peak,"
+          f"silenceremove=start_periods=1:start_threshold={TRIM_TAIL_DB}dB:"
+          f"start_silence={TRIM_TAIL_WIN}:detection={TRIM_DETECTION},"
           f"afade=t=in:st=0:d={FOUT},areverse,"        # fades the real END
-          "apad=pad_dur=0.14")
+          f"apad=pad_dur={TRIM_PAD}")
     fc = (f"[0:a]{sr}[body];"
           f"[1:a]atrim=0:{LEAD_SIL},asetpts=PTS-STARTPTS[lead];"
           f"[lead][body]concat=n=2:v=0:a=1[out]")

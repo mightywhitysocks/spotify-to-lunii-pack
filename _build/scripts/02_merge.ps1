@@ -31,8 +31,10 @@ $flat   = (@($Cfg.categories).Count -eq 0)
 $sr = $Cfg.audio.sample_rate; $ch = $Cfg.audio.channels
 $cl = if ($ch -eq 1) { 'mono' } else { 'stereo' }
 $storyExt = 'mp3'      # story audio is always re-encoded to mp3 for the Lunii
-$db = $Cfg.merge.trim_silence_db
 $lead = $Cfg.merge.lead; $tail = $Cfg.merge.tail; $gap = $Cfg.merge.gap
+$headDb = $Cfg.merge.trim_head_db; $headWin = $Cfg.merge.trim_head_window
+$tailDb = $Cfg.merge.trim_tail_db; $tailWin = $Cfg.merge.trim_tail_window
+$det    = $Cfg.merge.trim_detection; $pad = $Cfg.merge.trim_pad
 
 function Slug([string]$s) {
     $n = $s.Normalize([Text.NormalizationForm]::FormD)
@@ -47,10 +49,25 @@ function MoveIfNeeded($from, $to) {
 }
 function ToTreeRelative($p) { [IO.Path]::GetRelativePath($tree, $p) }
 
-# each chapter: to target rate/layout first (so concat segments match), then trim both edges
-$trim = "aresample=$sr,aformat=channel_layouts=$cl," +
-        "silenceremove=start_periods=1:start_threshold=${db}dB:start_silence=0.05," +
-        "areverse,silenceremove=start_periods=1:start_threshold=${db}dB:start_silence=0.05,areverse"
+# Edge-trim filter fragments -- applied ONLY to the story's two real external
+# edges (very start of chapter 1, very end of the last chapter). Chapter
+# junctions in between are never trimmed: they're already separated by $gap
+# of pure digital silence (no click risk), and trimming there used to eat the
+# first syllable of the next chapter (issue #4). Every chapter still gets
+# resampled/reformatted so the concat segments match.
+$conv     = "aresample=$sr,aformat=channel_layouts=$cl"
+$headOpts = "start_periods=1:start_threshold=${headDb}dB:start_silence=${headWin}:detection=${det}"
+$tailOpts = "start_periods=1:start_threshold=${tailDb}dB:start_silence=${tailWin}:detection=${det}"
+$trimHead = "$conv,silenceremove=$headOpts,apad=pad_dur=$pad"                                        # trims the start only
+$trimTail = "$conv,areverse,silenceremove=$tailOpts,areverse,apad=pad_dur=$pad"                       # trims the end only
+$trimBoth = "$conv,silenceremove=$headOpts,areverse,silenceremove=$tailOpts,areverse,apad=pad_dur=$pad"  # single-chapter story: both edges are external
+
+function ChapterFilter([int]$i, [int]$n) {
+    if     ($n -eq 1)      { $trimBoth }   # only chapter -> both its edges are external
+    elseif ($i -eq 0)      { $trimHead }   # first chapter -> only its START is external
+    elseif ($i -eq $n - 1) { $trimTail }   # last chapter -> only its END is external
+    else                   { $conv }       # inner chapter -> no external edge, no trim
+}
 
 # ---- previous layout (for the reconcile cache) -----------------------------
 $prev = @{}
@@ -104,10 +121,11 @@ $map = foreach ($st in $stories) {
         $reused++
     }
     else {
-        $parts = @("[0:a]$trim[c0]")
+        $n = $chapPaths.Count
+        $parts = @("[0:a]$(ChapterFilter 0 $n)[c0]")
         $seq   = @('[lead]', '[c0]')
-        for ($i = 1; $i -lt $chapPaths.Count; $i++) {
-            $parts += "[$i`:a]$trim[c$i]"
+        for ($i = 1; $i -lt $n; $i++) {
+            $parts += "[$i`:a]$(ChapterFilter $i $n)[c$i]"
             $seq   += @("[gap$i]", "[c$i]")
         }
         $seq += '[tail]'
