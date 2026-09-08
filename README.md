@@ -28,6 +28,7 @@ Tout ce qui est spécifique à un projet vit dans **un seul fichier de config**,
 | 8a | `08a_fetch_covers.py` | pochettes Spotify — si `covers.mode="spotify"` |
 | 8e / 8f | `08e_grayscale.py`, `08f_apply.py` | traitement gris + application aux écrans |
 | 5 | `05_run_spg.ps1` | génération du pack `.zip` (studio-pack-generator) |
+| 5b | `05b_check_story.py` | contrôle d'intégrité du `story.json` du pack généré |
 | 6 | `06_review_page.py` | page de relecture autonome des annonces de titre |
 
 Détail complet, config et procédures de correction : **[`_build/README.md`](_build/README.md)**
