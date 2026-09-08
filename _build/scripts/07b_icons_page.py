@@ -1,7 +1,7 @@
 """Self-contained gallery of every screen image, grouped by menu."""
 import base64, json, html
 from pathlib import Path
-from _config import CONFIG, BUILD, TREE, MENU
+from _config import CONFIG, BUILD, TREE, MENU, resolve_tree_path
 
 TITLE = CONFIG["title"]
 stories = json.loads((BUILD / "stories_tree.json").read_text(encoding="utf-8"))
@@ -35,7 +35,7 @@ for s in stories:
 if list(by_cat) == [""]:                       # flat menu, no categories
     parts.append("<h2>Histoires</h2><div class=g>")
     for s in by_cat[""]:
-        parts.append(f"<div class=c>{img(Path(s['item_png']))}"
+        parts.append(f"<div class=c>{img(resolve_tree_path(s['item_png']))}"
                      f"<div class=l>{html.escape(s['title'])}</div></div>")
     parts.append("</div>")
 else:
@@ -44,7 +44,7 @@ else:
         parts.append(f"<div class=c>{img(MENU / cat / '0-item.png')}"
                      f"<div class=l><b>[thème]</b></div></div>")
         for s in by_cat[cat]:
-            parts.append(f"<div class=c>{img(Path(s['item_png']))}"
+            parts.append(f"<div class=c>{img(resolve_tree_path(s['item_png']))}"
                          f"<div class=l>{html.escape(s['title'])}</div></div>")
         parts.append("</div>")
 

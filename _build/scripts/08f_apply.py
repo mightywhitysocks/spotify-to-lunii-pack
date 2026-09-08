@@ -6,7 +6,7 @@ Pack cover / menu / 9 themes are untouched.
 Run: py scripts/08f_apply.py    then    scripts/05_run_spg.ps1
 """
 import json, shutil
-from pathlib import Path
+from _config import resolve_tree_path
 from _covers import BUILD, CV, load_tune
 
 GRAY = CV / "gray"
@@ -18,7 +18,7 @@ def main():
     applied = kept = 0
     for st in stories:
         slug = st["base"]
-        dst = Path(st["item_png"])
+        dst = resolve_tree_path(st["item_png"])
         if (tune.get(slug, {}).get("style") or "").lower() == "icon":
             kept += 1
             print(f"  icon  {slug}")
