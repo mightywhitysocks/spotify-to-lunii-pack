@@ -19,10 +19,14 @@ $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot\_config.ps1"
 $build  = $Cfg.build
 $tree   = $Cfg.tree
-$uv     = $Cfg.uv
-$ffmpeg = $Cfg.ffmpeg
+$uv     = Assert-Tool $Cfg.uv 'uv'
+$ffmpeg = Assert-Tool $Cfg.ffmpeg 'ffmpeg'
 $env:FFMPEG_PATH = $ffmpeg
 $raw = $Cfg.rawAudio
+$sr  = $Cfg.audio.sample_rate; $ch = $Cfg.audio.channels
+$cl  = if ($ch -eq 1) { 'mono' } else { 'stereo' }
+$tLufs = $Cfg.audio.target_lufs; $tTp = $Cfg.audio.target_tp
+$codec = $Cfg.audio.codec; $brate = $Cfg.audio.bitrate
 if ($Fresh -and (Test-Path -LiteralPath $raw)) {
     Write-Host "-Fresh : suppression des copies pristine ($raw)"
     Remove-Item -LiteralPath $raw -Recurse -Force
@@ -31,7 +35,7 @@ New-Item -ItemType Directory -Force $raw | Out-Null
 
 function Measure-LU([string]$p) {
     $o = (& $ffmpeg -hide_banner -nostats -i $p -map 0:a:0 `
-          -af 'aformat=channel_layouts=mono,ebur128=peak=true' -f null - 2>&1) -join "`n"
+          -af "aformat=channel_layouts=$cl,ebur128=peak=true" -f null - 2>&1) -join "`n"
     $I  = if ($o -match '(?s)Integrated loudness:.*?I:\s*(-?[\d.]+)\s*LUFS') { [double]$Matches[1] } else { $null }
     $TP = if ($o -match '(?s)True peak:.*?Peak:\s*(-?[\d.]+)\s*dBFS') { [double]$Matches[1] } else { $null }
     [pscustomobject]@{ I = $I; TP = $TP }
@@ -42,7 +46,7 @@ if ($Only) {
     $re = ($Only | ForEach-Object { [regex]::Escape($_) }) -join '|'
     $files = $files | Where-Object { $_.FullName.Substring($tree.Length + 1) -match $re }
 }
-Write-Host ("normalisation de {0} fichiers -> -16 LUFS / -1.5 dBTP ..." -f $files.Count)
+Write-Host ("normalisation de {0} fichiers -> {1} LUFS / {2} dBTP ..." -f $files.Count, $tLufs, $tTp)
 $report = foreach ($f in $files) {
     $bak = Join-Path $raw (BakName $f.FullName)
     if (-not (Test-Path -LiteralPath $bak)) {
@@ -53,7 +57,7 @@ $report = foreach ($f in $files) {
     $before = Measure-LU $bak
     $tmp = "$($f.FullName).norm.mp3"
     & $uv tool run --from ffmpeg-normalize ffmpeg-normalize $bak -o $tmp -f `
-        -t -16 -tp -1.5 -nt ebu -c:a libmp3lame -b:a 256k -ar 44100 2>&1 | Out-Null
+        -t $tLufs -tp $tTp -nt ebu -c:a $codec -b:a $brate -ar $sr 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $tmp)) { throw "normalize failed: $($f.Name)" }
     Move-Item -LiteralPath $tmp -Destination $f.FullName -Force
     $after = Measure-LU $f.FullName
@@ -66,5 +70,5 @@ $report = foreach ($f in $files) {
 }
 $report | Export-Csv -LiteralPath (Join-Path $build 'audio_report.csv') -NoTypeInformation -Encoding UTF8
 $la = [double[]]($report.lufs_after | Where-Object { $_ -ne $null })
-Write-Host ("`nOK - LUFS apres : min={0:N1} max={1:N1} moy={2:N1}  (cible -16)" -f `
-    ($la|measure -min).Minimum, ($la|measure -max).Maximum, ($la|measure -average).Average)
+Write-Host ("`nOK - LUFS apres : min={0:N1} max={1:N1} moy={2:N1}  (cible {3})" -f `
+    ($la|measure -min).Minimum, ($la|measure -max).Maximum, ($la|measure -average).Average, $tLufs)

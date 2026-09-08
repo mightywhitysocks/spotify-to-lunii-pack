@@ -8,7 +8,8 @@ Tune   : cover_tune.csv  ->  crop_top/crop_bottom (frac), gamma, contrast, style
 """
 import csv, json, sys
 from pathlib import Path
-from _covers import BUILD, CV, IM, run, load_tune, gray_ops
+from _config import require_tool
+from _covers import BUILD, CV, IM, W, H, CROP_TOP, CROP_BOTTOM, run, load_tune, gray_ops
 
 RAW = CV / "raw"
 GRAY = CV / "gray"
@@ -17,20 +18,21 @@ SAMPLE = [s.strip() for s in (sys.argv[1] if len(sys.argv) > 1 else "").split(";
 
 
 def one(src: Path, out: Path, t: dict):
-    ct = float(t.get("crop_top") or 0.30)          # cut the "TIMOTÉ" + title text
-    cb = float(t.get("crop_bottom") or 0.16)       # cut the "lu par… / Lizzie" band
-    # crop to the illustration -> shared grayscale treatment -> fill 320x240, no border
+    ct = float(t.get("crop_top") or CROP_TOP)       # cut the title / header text band
+    cb = float(t.get("crop_bottom") or CROP_BOTTOM) # cut the credits / publisher band
+    # crop to the illustration -> shared grayscale treatment -> fill WxH, no border
     rc, o = run(
         IM, str(src),
         "-gravity", "North", "-chop", f"0x{ct*100:.1f}%",
         "-gravity", "South", "-chop", f"0x{cb*100:.1f}%",
         *gray_ops(t),
-        "-resize", "320x240^", "-gravity", "Center", "-extent", "320x240",
+        "-resize", f"{W}x{H}^", "-gravity", "Center", "-extent", f"{W}x{H}",
         "-strip", str(out))
     return rc == 0, o
 
 
 def main():
+    require_tool(IM, "imagemagick")
     stories = json.loads((BUILD / "stories_tree.json").read_text(encoding="utf-8"))
     if SAMPLE:
         stories = [s for s in stories if s["base"] in SAMPLE]
