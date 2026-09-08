@@ -17,7 +17,7 @@ Outputs : title_windows.csv , tree/**/<base>.item.mp3 , titles_review.html
 import csv, json, os, subprocess, unicodedata, html
 from functools import lru_cache
 from pathlib import Path
-from _config import CONFIG, BUILD, FFMPEG, FFPROBE, RAW_AUDIO, bak_name, require_tool
+from _config import CONFIG, BUILD, FFMPEG, FFPROBE, RAW_AUDIO, bak_name, require_tool, resolve_tree_path
 
 T = CONFIG["titles"]
 A = CONFIG["audio"]
@@ -171,7 +171,7 @@ def _write_review(full, allrows, heardmap):
            "<code>title_windows.csv</code>, relancer <code>03_titles.py</code>.</p><table>",
            "<tr><th>#<th>titre<th>méthode<th>durée<th>écoute<th>entendu</tr>"]
     for r in allrows:
-        it = Path(tr[r["base"]]["item_mp3"]).as_posix()
+        it = resolve_tree_path(tr[r["base"]]["item_mp3"]).as_posix()
         doc.append(f"<tr><td>{html.escape(r['base'])}<td>{html.escape(r['title'])}"
                    f"<td class={'f' if r['flag'] else ''}>{r['method']} {r['flag']}"
                    f"<td>{r['dur']}s<td><audio controls preload=none src='{html.escape(it)}'></audio>"
@@ -211,7 +211,7 @@ def run():
     changed = []
     for st in stories:
         base, ch1 = st["base"], st["chapter1"]
-        item = Path(st["item_mp3"])
+        item = resolve_tree_path(st["item_mp3"])
         item.parent.mkdir(parents=True, exist_ok=True)
         target = norm(st["title"]).split()
 
@@ -270,7 +270,7 @@ def run():
           f"{sum(1 for r in allrows if r['flag'])} à vérifier au total. {REVIEW}")
     if changed:
         tr = {s["base"]: s for s in full}
-        pats = ",".join(f"'{Path(tr[b]['item_mp3']).name}'" for b in changed)
+        pats = ",".join(f"'{resolve_tree_path(tr[b]['item_mp3']).name}'" for b in changed)
         print(f"\n>>> {len(changed)} clip(s) (re)découpé(s) au niveau brut — RENORMALISER :")
         print(f">>>   scripts\\04b_normalize.ps1 -Only {pats}")
         print(">>> puis  scripts\\05_run_spg.ps1")

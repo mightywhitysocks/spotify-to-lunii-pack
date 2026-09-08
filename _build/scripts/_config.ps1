@@ -151,6 +151,27 @@ function BakName([string]$fullPath) {
     (Split-Path (Split-Path $fullPath -Parent) -Leaf) + '__' + (Split-Path $fullPath -Leaf)
 }
 
+# Re-anchor a path stored in stories_tree.json under the local tree dir.
+# 02_merge.ps1 now writes story_mp3/item_mp3/item_png relative to $Cfg.tree,
+# but stories_tree.json produced by an older version of the script (or moved
+# from another machine) can still hold an absolute path, Windows backslashes
+# included. Keep only the portion after the 'tree' folder segment when present
+# (that folder's own fixed name), and rebuild it under the local tree -- a
+# purely relative path has no such segment and is joined onto the tree as-is.
+# Mirror of resolve_tree_path() in _config.py -- keep the two in sync.
+function Resolve-TreePath([string]$raw) {
+    $parts = [regex]::Split($raw, '[\\/]+') | Where-Object { $_ -ne '' }
+    $i = [array]::IndexOf($parts, 'tree')
+    if ($i -ge 0) {
+        $rest = @()
+        for ($j = $i + 1; $j -lt $parts.Count; $j++) { $rest += $parts[$j] }
+        $parts = $rest
+    }
+    $p = $Cfg.tree
+    foreach ($seg in $parts) { $p = Join-Path $p $seg }
+    return $p
+}
+
 # regex-escaped alternation of the configured source extensions, e.g. 'mp3|m4a|flac'
 function SourceExtRegex { ($Cfg.source_ext | ForEach-Object { [regex]::Escape($_) }) -join '|' }
 function Test-SourceFile([string]$name) {

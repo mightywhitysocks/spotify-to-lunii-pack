@@ -1,8 +1,7 @@
 """Regenerate a self-contained titles_review.html with the audio embedded
 (base64 data URIs) so it plays anywhere, no local file access needed."""
 import base64, csv, json, html
-from pathlib import Path
-from _config import CONFIG, BUILD
+from _config import CONFIG, BUILD, resolve_tree_path
 
 TITLE = CONFIG["title"]
 tr = {s["base"]: s for s in json.loads((BUILD / "stories_tree.json").read_text(encoding="utf-8"))}
@@ -24,7 +23,7 @@ parts = [f"<!doctype html><meta charset=utf-8><title>Annonces de titre - {html.e
 
 for r in rows:
     st = tr[r["base"]]
-    mp3 = Path(st["item_mp3"])
+    mp3 = resolve_tree_path(st["item_mp3"])
     if mp3.exists():
         b64 = base64.b64encode(mp3.read_bytes()).decode()
         audio = f"<audio controls preload=metadata src='data:audio/mpeg;base64,{b64}'></audio>"

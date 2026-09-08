@@ -210,11 +210,14 @@ def bak_name(p) -> str:
 def resolve_tree_path(raw) -> Path:
     """Re-anchor a path stored in stories_tree.json under the local TREE.
 
-    02_merge.ps1 writes absolute paths (Windows backslashes included) as seen
-    on whatever machine ran it -- meaningless on any other machine/platform.
-    Keep only the portion after the 'tree' folder segment (present in every
-    such path, since it's TREE's own fixed name) and rebuild it under the
-    local TREE, regardless of the separator or platform it was written with.
+    02_merge.ps1 now writes story_mp3/item_mp3/item_png relative to its tree
+    dir, but a stories_tree.json produced by an older version of the script
+    (or moved from another machine) can still hold an absolute path, Windows
+    backslashes included. Keep only the portion after the 'tree' folder
+    segment when present (that folder's own fixed name) and rebuild it under
+    the local TREE, regardless of the separator or platform it was written
+    with -- a purely relative path has no such segment and is joined onto
+    TREE as-is.
     """
     parts = [p for p in re.split(r"[\\/]+", str(raw)) if p]
     if "tree" in parts:
