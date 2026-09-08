@@ -2,9 +2,11 @@
 
 The **single source of truth** for a pack build. `scripts/_config.ps1`
 (dot-source) and `scripts/_config.py` (import) locate it (env `PACK_CONFIG`
-wins, else `_build/project.json`), deep-merge it over the built-in DEFAULTS and
-expose one `$Cfg` / `CONFIG` object. Every key below is optional: a near-empty
-file (`{"title": "...", "source_dir": ".."}`) already builds a sane flat pack.
+wins, else `_build/project.json`), deep-merge it over the built-in DEFAULTS,
+then deep-merge `_build/project.local.json` on top if present (gitignored,
+machine-specific — see `tools` below), and expose one `$Cfg` / `CONFIG`
+object. Every key below is optional: a near-empty file
+(`{"title": "...", "source_dir": ".."}`) already builds a sane flat pack.
 
 `_build/project.json` (Timoté) is the worked example; `_build/project.example.json`
 is a minimal generic template.
@@ -157,10 +159,15 @@ All optional — a blank value is auto-discovered on `PATH`
 (`Get-Command` / `shutil.which`), else the script fails with a clear message.
 A relative value is resolved against `_build/`.
 
-| key | PATH names tried | Timoté value |
-|---|---|---|
-| `ffmpeg` | `ffmpeg` | `C:\Program Files\ffmpeg\bin\ffmpeg.exe` |
-| `ffprobe` | `ffprobe` (else sibling of `ffmpeg`) | `…\ffprobe.exe` |
-| `uv` | `uv` | WinGet Packages `uv.exe` |
-| `spg` | `studio-pack-generator`, `studio-pack-generator-x86_64-windows[.exe]`, `-x86_64-linux`, `-aarch64-linux`, `-x86_64-macos`, `-aarch64-macos` | `tools/spg/Studio-Pack-Generator/studio-pack-generator-x86_64-windows.exe` |
-| `imagemagick` | `magick`, `convert` | `tools/spg/Studio-Pack-Generator/tools/convert.exe` |
+Machine-specific, so it never lives in the committed `project.json` (or
+`project.example.json`): put it in `_build/project.local.json` instead — a
+gitignored file, deep-merged on top of `project.json` by both loaders. Copy
+`project.local.json.example` to get started.
+
+| key | PATH names tried |
+|---|---|
+| `ffmpeg` | `ffmpeg` |
+| `ffprobe` | `ffprobe` (else sibling of `ffmpeg`) |
+| `uv` | `uv` |
+| `spg` | `studio-pack-generator`, `studio-pack-generator-x86_64-windows[.exe]`, `-x86_64-linux`, `-aarch64-linux`, `-x86_64-macos`, `-aarch64-macos` |
+| `imagemagick` | `magick`, `convert` |

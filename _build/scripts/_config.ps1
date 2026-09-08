@@ -86,6 +86,15 @@ if (Test-Path -LiteralPath $cfgPath) {
     $user = Get-Content -LiteralPath $cfgPath -Raw | ConvertFrom-Json -AsHashtable
 }
 $Cfg = Merge-Config $Defaults $user
+
+# machine-specific overrides (tool paths, ...) -- gitignored, never committed,
+# always at _build\project.local.json regardless of PACK_CONFIG. See
+# project.local.json.example. Mirror of _config.py -- keep the two in sync.
+$localCfgPath = Join-Path $BuildDir 'project.local.json'
+if (Test-Path -LiteralPath $localCfgPath) {
+    $local = Get-Content -LiteralPath $localCfgPath -Raw | ConvertFrom-Json -AsHashtable
+    $Cfg = Merge-Config $Cfg $local
+}
 if (-not $Cfg.menu_root_name) { $Cfg.menu_root_name = ConvertTo-Slug $Cfg.title }
 
 # ---- tool resolution ----------------------------------------------------
@@ -104,7 +113,7 @@ function Assert-Tool($path, [string]$label) {
     if (-not $path -or -not (Test-Path -LiteralPath $path)) {
         $g = if ($path) { Get-Command $path -ErrorAction SilentlyContinue } else { $null }
         if (-not $g) {
-            throw "$label introuvable ($path). Renseigne tools dans $cfgPath ou ajoute $label au PATH."
+            throw "$label introuvable ($path). Renseigne tools dans $localCfgPath (voir project.local.json.example) ou ajoute $label au PATH."
         }
     }
     return $path
@@ -132,6 +141,7 @@ $Cfg.uv       = $uv
 $Cfg.spg      = $spg
 $Cfg.im       = $im
 $Cfg.configPath = $cfgPath
+$Cfg.localConfigPath = $localCfgPath
 # JSON stores the Python-style named groups (?P<name>); .NET wants (?<name>)
 $Cfg.filenamePatternNet = $Cfg.filename_pattern -replace '\(\?P<', '(?<'
 

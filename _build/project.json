@@ -150,13 +150,5 @@
     "engine": "piper",
     "model": "tools/piper/fr_FR-siwis-medium.onnx",
     "lead": 0.15, "tail": 0.4
-  },
-
-  "tools": {
-    "ffmpeg": "C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe",
-    "ffprobe": "C:\\Program Files\\ffmpeg\\bin\\ffprobe.exe",
-    "uv": "C:\\Users\\gia_a\\AppData\\Local\\Microsoft\\WinGet\\Packages\\astral-sh.uv_Microsoft.Winget.Source_8wekyb3d8bbwe\\uv.exe",
-    "spg": "tools/spg/Studio-Pack-Generator/studio-pack-generator-x86_64-windows.exe",
-    "imagemagick": "tools/spg/Studio-Pack-Generator/tools/convert.exe"
   }
 }

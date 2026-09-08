@@ -121,12 +121,20 @@ def _load():
     if path.exists():
         user = json.loads(path.read_text(encoding="utf-8"))
     cfg = _deep_merge(DEFAULTS, user)
+    # machine-specific overrides (tool paths, ...) -- gitignored, never committed,
+    # always at _build/project.local.json regardless of PACK_CONFIG. See
+    # project.local.json.example.
+    local_path = BUILD / "project.local.json"
+    if local_path.exists():
+        local = json.loads(local_path.read_text(encoding="utf-8"))
+        cfg = _deep_merge(cfg, local)
     if not cfg.get("menu_root_name"):
         cfg["menu_root_name"] = slugify(cfg["title"])
     if not cfg["tts"].get("lead"):
         cfg["tts"]["lead"] = DEFAULTS["tts"]["lead"]
     cfg["_path"] = str(path)
     cfg["_exists"] = path.exists()
+    cfg["_local_path"] = str(local_path)
     return cfg
 
 
@@ -172,11 +180,13 @@ def require_tool(path, label):
         if not Path(path).exists():
             raise SystemExit(
                 f"{label} introuvable : {path}\n"
-                f"  -> renseigne tools dans {CONFIG['_path']} ou ajoute {label} au PATH.")
+                f"  -> renseigne tools dans {CONFIG['_local_path']} (voir "
+                f"project.local.json.example) ou ajoute {label} au PATH.")
     elif shutil.which(str(path)) is None:
         raise SystemExit(
             f"{label} introuvable sur le PATH ({path})\n"
-            f"  -> renseigne tools dans {CONFIG['_path']} ou installe {label}.")
+            f"  -> renseigne tools dans {CONFIG['_local_path']} (voir "
+            f"project.local.json.example) ou installe {label}.")
     return str(path)
 
 

@@ -8,10 +8,12 @@ partir des fichiers audio de `source_dir` (jamais modifiés).
 `scripts/_config.ps1` (dot-source) et `scripts/_config.py` (import) sont des
 **loaders** : ils localisent le fichier de config (env `PACK_CONFIG`, sinon
 `_build/project.json`), le fusionnent en profondeur par-dessus des valeurs par
-défaut, résolvent les chemins d'outils (valeur de config → sinon `Get-Command` /
-`shutil.which` sur le PATH → sinon erreur explicite) et exposent un objet unique
-`$Cfg` / `CONFIG`. Les noms historiques (`$Cfg.build` / `.tree` / `.src` /
-`.ffmpeg` … et `BUILD` / `TREE` / `FFMPEG` …) sont dérivés de la config.
+défaut, fusionnent par-dessus `_build/project.local.json` s'il existe (gitignoré,
+overrides machine — voir « Outils » ci-dessous), résolvent les chemins d'outils
+(valeur de config → sinon `Get-Command` / `shutil.which` sur le PATH → sinon
+erreur explicite) et exposent un objet unique `$Cfg` / `CONFIG`. Les noms
+historiques (`$Cfg.build` / `.tree` / `.src` / `.ffmpeg` … et `BUILD` / `TREE` /
+`FFMPEG` …) sont dérivés de la config.
 
 - **Toutes les clés** : [`project.schema.md`](project.schema.md)
 - **Exemple minimal générique** : [`project.example.json`](project.example.json)
@@ -35,6 +37,10 @@ défaut, le menu est à plat tant que `categories` est vide.
 Chaque clé `tools` vide est auto-détectée sur le PATH ; l'auto-détection de SPG
 accepte le suffixe de plateforme (`-x86_64-windows`, `-x86_64-linux`,
 `-aarch64-macos`, …). Une valeur relative est résolue par rapport à `_build/`.
+
+Ces chemins sont propres à chaque machine : ils ne vont jamais dans `project.json`
+(committé), mais dans `_build/project.local.json` — gitignoré, copié depuis
+[`project.local.json.example`](project.local.json.example) puis adapté.
 
 ## Pipeline (`scripts\`)
 
