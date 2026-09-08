@@ -16,11 +16,16 @@ Un correctif = un commit poussé sur `main`.
 
 | #8 | Validation de `project.json` (clés requises, enums de mode, schéma) | Validation légère dans les deux loaders (option recommandée par l'issue) : `*.mode` / `tts.engine` hors énumération → arrêt avec message ; clé inconnue (récursive, hors maps free-form) → warning. `sources` ajouté à `$Defaults.icons` (drift PS/Python corrigé au passage). README + `project.schema.md` à jour. | `d57ea64` |
 | #13 | Homogénéiser fail-soft / fail-loud | Classée (not planned) : aucun échec silencieux concret non traité (icônes → #30, typo config → #8, outils manquants déjà fail-loud). | — |
-| #20 | Script de récupération de studio-pack-generator (version épinglée + checksum) | `scripts/get_spg.ps1` : SPG v0.5.15 depuis les releases `jersou/studio-pack-generator`, SHA-256 épinglé par plateforme (digests GitHub), dézip dans `_build/tools/spg/`. Détection de plateforme, `-Force`, no-op si déjà présent. Testé bout-en-bout (download + checksum + extraction, 5 s). README racine + `_build`. | _(ce commit)_ |
+| #20 | Script de récupération de studio-pack-generator (version épinglée + checksum) | `scripts/get_spg.ps1` : SPG v0.5.15 depuis les releases `jersou/studio-pack-generator`, SHA-256 épinglé par plateforme (digests GitHub), dézip dans `_build/tools/spg/`. Détection de plateforme, `-Force`, no-op si déjà présent. Testé bout-en-bout (download + checksum + extraction, 5 s). README racine + `_build`. | `152025d` |
+| #7 | CI GitHub Actions : lint + compile + validation de config | Workflow minimal (option recommandée par l'issue, débloquée par #8) : `.github/workflows/ci.yml` — `py_compile` de tous les `.py`, parse de tous les `.ps1` via `Parser::ParseFile`, chargement de `_config.py` + dot-source de `_config.ps1` (fallback `project.example.json`). Pas de `ruff` / `PSScriptAnalyzer`. Étapes simulées en local avant push. | _(ce commit)_ |
 
-## À suivre (ordre prévu, du plus simple au plus complexe)
+## À suivre
 
-- #3 / #6 — revue et complément de documentation
+- #3 / #6 — revue et complément de documentation (partiellement absorbé : la doc
+  est mise à jour à chaque correctif ci-dessus).
+- Restantes ouvertes : `needs-decision` / `blocked` / `needs-investigation` ou
+  gros chantiers (#9, #10, #11, #12, #14, #16, #17, #19, #21, #24, #27, #28, #5)
+  — arbitrage produit / matériel Lunii requis.
 
 ## Écartées pour l'instant
 

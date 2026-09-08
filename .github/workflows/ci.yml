@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Minimal on purpose (see issue #7): compile + parse both languages and load the
+# config. No ruff / PSScriptAnalyzer -- they'd be noise for a solo project. The
+# real catch here is "a change broke the other language's syntax", since the
+# author only runs the pipeline on Windows.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile every Python script
+        run: python -m py_compile _build/scripts/*.py
+
+      - name: Load _config.py (falls back to project.example.json)
+        working-directory: _build
+        run: python -c "import sys; sys.path.insert(0, 'scripts'); import _config; print('config OK:', _config.CONFIG['title'])"
+
+      - name: Parse every PowerShell script
+        shell: pwsh
+        run: |
+          $bad = 0
+          Get-ChildItem -Recurse -Filter *.ps1 | ForEach-Object {
+              $errors = $null
+              [void][System.Management.Automation.Language.Parser]::ParseFile(
+                  $_.FullName, [ref]$null, [ref]$errors)
+              foreach ($e in $errors) {
+                  $bad++
+                  Write-Host "::error file=$($_.FullName),line=$($e.Extent.StartLineNumber)::$($e.Message)"
+              }
+          }
+          if ($bad) { throw "$bad erreur(s) de syntaxe PowerShell" }
+
+      - name: Dot-source _config.ps1
+        shell: pwsh
+        working-directory: _build
+        run: . ./scripts/_config.ps1; "config OK: $($Cfg.title)"
