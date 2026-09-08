@@ -48,11 +48,7 @@ $rows = foreach ($f in $files) {
     $title = $Matches[$gTitle].Trim()
 
     $dur = & $ffprobe -v error -show_entries format=duration -of csv=p=0 -- $f.FullName
-    $eb  = & $ffmpeg -hide_banner -nostats -i $f.FullName -map 0:a:0 `
-             -af 'aformat=channel_layouts=mono,ebur128=peak=true' -f null - 2>&1
-    $ebt = $eb -join "`n"
-    $I    = if ($ebt -match '(?s)Integrated loudness:.*?I:\s*(-?\d+(?:\.\d+)?)\s*LUFS') { [double]$Matches[1] } else { $null }
-    $peak = if ($ebt -match '(?s)True peak:.*?Peak:\s*(-?\d+(?:\.\d+)?)\s*dBFS') { [double]$Matches[1] } else { $null }
+    $lu  = Measure-Loudness $f.FullName 'mono'
 
     [pscustomobject]@{
         num      = $num
@@ -61,8 +57,8 @@ $rows = foreach ($f in $files) {
         key      = Story-Key $title
         file     = $f.Name
         seconds  = [math]::Round([double]$dur, 1)
-        lufs     = $I
-        peak_dbfs= $peak
+        lufs     = $lu.lufs
+        peak_dbfs= $lu.peak
         status   = if ($discard.ContainsKey($num)) { "ecarte: $($discard[$num])" } else { 'garde' }
     }
 }

@@ -192,6 +192,20 @@ function Resolve-TreePath([string]$raw) {
     return $p
 }
 
+# Single ffmpeg EBU R128 pass over one file -> integrated loudness + true peak.
+# The one measurement path for 01_inventory / 04b_normalize / 04d_report -- keep
+# it here so a change to the filter or the parse lands everywhere at once.
+# Caller must have asserted $Cfg.ffmpeg (Assert-Tool). $layout: 'mono' | 'stereo'.
+function Measure-Loudness([string]$path, [string]$layout = 'mono') {
+    $o = (& $Cfg.ffmpeg -hide_banner -nostats -i $path -map 0:a:0 `
+          -af "aformat=channel_layouts=$layout,ebur128=peak=true:framelog=quiet" `
+          -f null - 2>&1) -join "`n"
+    $sum = ($o -split 'Summary:')[-1]
+    $I  = if ($sum -match 'I:\s*(-?[\d.]+)\s*LUFS')    { [double]$Matches[1] } else { $null }
+    $TP = if ($sum -match 'Peak:\s*(-?[\d.]+)\s*dBFS') { [double]$Matches[1] } else { $null }
+    [pscustomobject]@{ lufs = $I; peak = $TP }
+}
+
 # regex-escaped alternation of the configured source extensions, e.g. 'mp3|m4a|flac'
 function SourceExtRegex { ($Cfg.source_ext | ForEach-Object { [regex]::Escape($_) }) -join '|' }
 function Test-SourceFile([string]$name) {

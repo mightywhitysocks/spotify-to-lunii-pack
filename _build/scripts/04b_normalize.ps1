@@ -35,14 +35,6 @@ if ($Fresh -and (Test-Path -LiteralPath $raw)) {
 }
 New-Item -ItemType Directory -Force $raw | Out-Null
 
-function Measure-LU([string]$p) {
-    $o = (& $ffmpeg -hide_banner -nostats -i $p -map 0:a:0 `
-          -af "aformat=channel_layouts=$cl,ebur128=peak=true" -f null - 2>&1) -join "`n"
-    $I  = if ($o -match '(?s)Integrated loudness:.*?I:\s*(-?[\d.]+)\s*LUFS') { [double]$Matches[1] } else { $null }
-    $TP = if ($o -match '(?s)True peak:.*?Peak:\s*(-?[\d.]+)\s*dBFS') { [double]$Matches[1] } else { $null }
-    [pscustomobject]@{ I = $I; TP = $TP }
-}
-
 $files = Get-ChildItem -LiteralPath $tree -Recurse -Filter *.mp3 | Sort-Object FullName
 if ($Only) {
     $re = ($Only | ForEach-Object { [regex]::Escape($_) }) -join '|'
@@ -56,18 +48,18 @@ $report = foreach ($f in $files) {
         Copy-Item -LiteralPath $f.FullName -Destination $bak -Force
     }
     # measure the PRISTINE copy (the tree file may already be normalised)
-    $before = Measure-LU $bak
+    $before = Measure-Loudness $bak $cl
     $tmp = "$($f.FullName).norm.mp3"
     & $uv tool run --from ffmpeg-normalize ffmpeg-normalize $bak -o $tmp -f `
         -t $tLufs -tp $tTp -nt ebu -c:a $codec -b:a $brate -ar $sr 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $tmp)) { throw "normalize failed: $($f.Name)" }
     Move-Item -LiteralPath $tmp -Destination $f.FullName -Force
-    $after = Measure-LU $f.FullName
-    Write-Host ("  {0,-42} {1,6} -> {2,6} LUFS  (tp {3})" -f $f.Name, $before.I, $after.I, $after.TP)
+    $after = Measure-Loudness $f.FullName $cl
+    Write-Host ("  {0,-42} {1,6} -> {2,6} LUFS  (tp {3})" -f $f.Name, $before.lufs, $after.lufs, $after.peak)
     [pscustomobject]@{
         file = $f.FullName.Substring($tree.Length + 1)
-        lufs_before = $before.I; peak_before = $before.TP
-        lufs_after  = $after.I;  peak_after  = $after.TP
+        lufs_before = $before.lufs; peak_before = $before.peak
+        lufs_after  = $after.lufs;  peak_after  = $after.peak
     }
 }
 $report | Export-Csv -LiteralPath (Join-Path $build 'normalize_report.csv') -NoTypeInformation -Encoding UTF8

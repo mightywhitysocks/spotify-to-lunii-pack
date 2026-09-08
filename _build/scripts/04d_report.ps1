@@ -9,23 +9,13 @@ $cl = if ($ch -eq 1) { 'mono' } else { 'stereo' }
 $fmtWant = "$sr,$ch"
 $tLufs = $Cfg.audio.target_lufs
 
-function Measure-LU([string]$p) {
-    $o = (& $ffmpeg -hide_banner -i $p -map 0:a:0 `
-          -af "aformat=channel_layouts=$cl,ebur128=peak=true:framelog=quiet" `
-          -f null - 2>&1) -join "`n"
-    $sum = ($o -split 'Summary:')[-1]
-    $I  = if ($sum -match 'I:\s*(-?[\d.]+)\s*LUFS')   { [double]$Matches[1] } else { $null }
-    $TP = if ($sum -match 'Peak:\s*(-?[\d.]+)\s*dBFS') { [double]$Matches[1] } else { $null }
-    @($I, $TP)
-}
-
 $rows = foreach ($f in (Get-ChildItem -LiteralPath $tree -Recurse -Filter *.mp3 | Sort-Object FullName)) {
-    $m = Measure-LU $f.FullName
+    $m = Measure-Loudness $f.FullName $cl
     $j = & $ffprobe -v error -show_entries stream=sample_rate,channels `
          -of csv=p=0 -- $f.FullName
     [pscustomobject]@{
         file = $f.FullName.Substring($tree.Length + 1)
-        lufs = $m[0]; peak_dbfs = $m[1]; fmt = $j
+        lufs = $m.lufs; peak_dbfs = $m.peak; fmt = $j
     }
 }
 $rows | Export-Csv -LiteralPath (Join-Path $build 'audio_report.csv') -NoTypeInformation -Encoding UTF8
