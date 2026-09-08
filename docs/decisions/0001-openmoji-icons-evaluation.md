@@ -75,3 +75,5 @@ Deux fragilités de robustesse du pipeline ont été identifiées en cours d'ana
 2. Le "fallback texte" annoncé pour une icône manquante (`OK n images / m manquantes (gardent le texte)`) ne fonctionne qu'en rebuild incrémental : en cold start, `05_run_spg.ps1` désactive globalement la génération d'image texte de secours dès que `icons.mode="emoji"`, donc une icône manquante au premier build se retrouve sans image du tout.
 
 Recommandation : ouvrir une issue dédiée à ces deux points plutôt que de les traiter ici — ce sont des bugs de pipeline, pas une décision UX.
+
+**Résolu** par [#30](https://github.com/mightywhitysocks/spotify-to-lunii-pack/issues/30) : (1) cache OpenMoji namespacé par set (`_build/tools/openmoji/<set>/`) ; (2) `07_icons.py` écrit `work/icons_report.json` et `05_run_spg.ps1` ne passe `--skip-image-item-gen` que si la couverture est à 100 %, laissant sinon SPG rendre un écran texte de secours pour chaque icône manquante.
