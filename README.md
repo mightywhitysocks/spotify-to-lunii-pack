@@ -12,6 +12,17 @@ Tout ce qui est spécifique à un projet vit dans **un seul fichier de config**,
 > Ce dépôt ne contient **que le code et la configuration**. Les fichiers audio,
 > les images, les binaires d'outils et le pack généré sont exclus (`.gitignore`).
 
+## Licence et usage
+
+Le **code** de ce dépôt est distribué sous licence [MIT](LICENSE).
+
+Cette licence ne porte que sur le code : **aucun média** (fichiers audio,
+pochettes, illustrations) n'est distribué avec ce dépôt, ni ne doit l'être —
+ce sont des contenus tiers destinés à un usage **strictement personnel et
+familial** (packs Lunii pour un usage domestique). Les pictogrammes OpenMoji
+utilisés par le pipeline restent sous licence CC BY-SA 4.0 avec attribution
+(voir [Prérequis](#prérequis-non-versionnés)).
+
 ## Pipeline
 
 | Étape | Script (`_build/scripts/`) | Rôle |
