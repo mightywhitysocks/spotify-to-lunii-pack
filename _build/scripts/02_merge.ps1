@@ -45,6 +45,7 @@ function MoveIfNeeded($from, $to) {
         Move-Item -LiteralPath $from -Destination $to -Force
     }
 }
+function ToTreeRelative($p) { [IO.Path]::GetRelativePath($tree, $p) }
 
 # each chapter: to target rate/layout first (so concat segments match), then trim both edges
 $trim = "aresample=$sr,aformat=channel_layouts=$cl," +
@@ -92,11 +93,13 @@ $map = foreach ($st in $stories) {
 
     $chapPaths = @($st.chapters | ForEach-Object { Join-Path $src $_ })
     $p = $prev[$st.key]
-    $reuse = $p -and (Test-Path -LiteralPath $p.story_mp3)
+    $prevMp3 = if ($p) { Resolve-TreePath $p.story_mp3 } else { $null }
+    $reuse = $p -and (Test-Path -LiteralPath $prevMp3)
     if ($reuse) {
         foreach ($pair in @(@($p.story_mp3, $outMp3), @($p.item_mp3, $outItem), @($p.item_png, $outPng))) {
-            MoveIfNeeded $pair[0] $pair[1]
-            MoveIfNeeded (Join-Path $rawDir (BakName $pair[0])) (Join-Path $rawDir (BakName $pair[1]))
+            $fromAbs = Resolve-TreePath $pair[0]
+            MoveIfNeeded $fromAbs $pair[1]
+            MoveIfNeeded (Join-Path $rawDir (BakName $fromAbs)) (Join-Path $rawDir (BakName $pair[1]))
         }
         $reused++
     }
@@ -129,9 +132,9 @@ $map = foreach ($st in $stories) {
     [pscustomobject]@{
         key = $st.key; title = $st.title; category = $cat
         base = $st.slug            # STABLE key for title_windows.csv / cover_tune.csv
-        story_mp3 = $outMp3
-        item_mp3  = $outItem
-        item_png  = $outPng
+        story_mp3 = ToTreeRelative $outMp3   # relative to $tree -- portable across machines
+        item_mp3  = ToTreeRelative $outItem
+        item_png  = ToTreeRelative $outPng
         chapter1  = [string]$chapPaths[0]
     }
 }
