@@ -1,13 +1,25 @@
 # --- Secrets ---
 _build/.spotify
 
-# --- Audio (source MP3s + generated clips + pack zip) ---
+# --- Audio / video (source media + generated clips + pack zip) ---
 *.mp3
 *.wav
 *.flac
 *.m4a
+*.m4b
 *.ogg
+*.opus
+*.mp4
+*.m4v
+*.mkv
+*.mov
+*.avi
+*.webm
 *.zip
+
+# --- Python bytecode cache ---
+__pycache__/
+*.pyc
 
 # --- Images (covers, icons, title cards, previews) ---
 *.jpg

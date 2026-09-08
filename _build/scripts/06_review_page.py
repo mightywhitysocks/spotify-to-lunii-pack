@@ -2,12 +2,13 @@
 (base64 data URIs) so it plays anywhere, no local file access needed."""
 import base64, csv, json, html
 from pathlib import Path
+from _config import CONFIG, BUILD
 
-BUILD = Path(__file__).resolve().parent.parent
+TITLE = CONFIG["title"]
 tr = {s["base"]: s for s in json.loads((BUILD / "stories_tree.json").read_text(encoding="utf-8"))}
 rows = list(csv.DictReader((BUILD / "title_windows.csv").open(encoding="utf-8-sig")))
 
-parts = ["<!doctype html><meta charset=utf-8><title>Annonces de titre - Timoté</title>",
+parts = [f"<!doctype html><meta charset=utf-8><title>Annonces de titre - {html.escape(TITLE)}</title>",
          "<style>body{font:14px/1.4 system-ui,sans-serif;margin:24px;max-width:820px;color:#222}"
          "h1{font-size:20px}table{border-collapse:collapse;width:100%}"
          "td,th{padding:7px 10px;text-align:left;border-bottom:1px solid #e3e3e3;vertical-align:middle}"
@@ -30,9 +31,11 @@ for r in rows:
     else:
         audio = "<i>absent</i>"
     fl = f" <span class=flag>{r['flag']}</span>" if r["flag"] else ""
+    cat = st.get("category") or ""
+    cat_html = f"<div class=cat>{html.escape(cat)}</div>" if cat else ""
     parts.append(
-        f"<tr><td>{html.escape(r['base'].split()[0])}</td>"
-        f"<td>{html.escape(r['title'])}<div class=cat>{html.escape(st['category'])}</div></td>"
+        f"<tr><td>{html.escape(r['base'])}</td>"
+        f"<td>{html.escape(r['title'])}{cat_html}</td>"
         f"<td>{audio}</td><td>{r['dur']}s</td><td>{r['method']}{fl}</td></tr>")
 
 parts.append("</table>")

@@ -11,17 +11,16 @@ Manual override: put a url on a slug's row of covers_urls.csv -> it wins.
 import base64, csv, json, re, time, unicodedata, html
 from pathlib import Path
 import requests
+from _config import CONFIG, BUILD
 
-BUILD = Path(__file__).resolve().parent.parent
 RAW = BUILD / "covers" / "raw"
 RAW.mkdir(parents=True, exist_ok=True)
 CSV = BUILD / "covers_urls.csv"
 IDX = BUILD / "covers_raw_index.html"
 CONF = BUILD / ".spotify"
 
-BAD_ALBUM = re.compile(r"\b(5 histoires|aventures de timot|int[ée]grale|coffret|compilation|"
-                       r"une ann[ée]e avec|le quotidien de timot|best of|volume)\b", re.I)
-GOOD_ARTIST = re.compile(r"lizzie|gr[üu]nd|timot|massonaud", re.I)
+BAD_ALBUM = re.compile(CONFIG["covers"]["bad_album"], re.I) if CONFIG["covers"].get("bad_album") else None
+GOOD_ARTIST = re.compile(CONFIG["covers"]["good_artist"], re.I) if CONFIG["covers"].get("good_artist") else None
 
 
 def norm(s):
@@ -89,9 +88,9 @@ def search_album(tok, title):
             else:
                 common = len(set(nt.split()) & set(nn.split()))
                 score = common / max(1, len(nt.split())) * 0.6
-            if BAD_ALBUM.search(name):
+            if BAD_ALBUM and BAD_ALBUM.search(name):
                 score -= 0.5
-            if GOOD_ARTIST.search(arts) or GOOD_ARTIST.search(name):
+            if GOOD_ARTIST and (GOOD_ARTIST.search(arts) or GOOD_ARTIST.search(name)):
                 score += 0.15
             if it.get("total_tracks", 99) <= 3:
                 score += 0.1
@@ -103,6 +102,9 @@ def search_album(tok, title):
 
 
 def main():
+    if CONFIG["covers"].get("mode") != "spotify":
+        print("pochettes désactivées (covers.mode=off)")
+        return
     stories = json.loads((BUILD / "stories_tree.json").read_text(encoding="utf-8"))
     manual = {}
     if CSV.exists():

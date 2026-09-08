@@ -1,0 +1,39 @@
+{
+  "title": "Mon pack d'histoires",
+  "description": "Pack perso",
+  "lang": "fr",
+  "nightModeAvailable": false,
+
+  "source_dir": "..",
+  "source_ext": ["mp3", "m4a", "m4b", "flac", "ogg", "opus", "wav", "mp4", "mkv"],
+
+  "filename_pattern": "^(?P<num>\\d+)[\\s._-]+(?P<title>.+)$",
+
+  "audio": { "sample_rate": 44100, "channels": 1, "bitrate": "256k", "target_lufs": -16, "target_tp": -1.5 },
+  "merge": { "lead": 0.3, "tail": 0.6, "gap": 0.8, "trim_silence_db": -50 },
+
+  "categories": [
+    { "name": "1 Aventures", "prompt": "Les aventures.", "icon": "1F30D",
+      "stories": ["le grand voyage", "la foret magique"] },
+    { "name": "2 Au lit", "prompt": "Pour dormir.", "icon": "1F319",
+      "stories": ["la berceuse", "compte les moutons"] }
+  ],
+  "uncategorized_name": "Divers",
+
+  "menu_prompts": { "root": "Choisis une histoire.", "category_chooser": "Choisis un thème." },
+
+  "titles": { "mode": "off" },
+  "icons": { "mode": "off" },
+  "covers": { "mode": "off" },
+  "pack_cover": { "mode": "none" },
+
+  "tts": { "engine": "piper", "model": "tools/piper/fr_FR-siwis-medium.onnx" },
+
+  "tools": {
+    "ffmpeg": "",
+    "ffprobe": "",
+    "uv": "",
+    "spg": "",
+    "imagemagick": ""
+  }
+}

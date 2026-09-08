@@ -1,10 +1,15 @@
-"""shared helpers for the cover / icon image scripts."""
+"""shared helpers for the cover / icon image scripts. Geometry + colours from project.json."""
 import csv, subprocess
 from pathlib import Path
-from _config import BUILD, FFMPEG, IM, CANVAS, TREE
+from _config import CONFIG, BUILD, FFMPEG, IM, CANVAS, TREE
 
 CV = BUILD / "covers"
 TUNE = BUILD / "cover_tune.csv"
+
+IMG = CONFIG["image"]
+W, H, FIT = int(IMG["w"]), int(IMG["h"]), int(IMG["fit"])
+CROP_TOP = float(CONFIG["covers"]["crop_top"])
+CROP_BOTTOM = float(CONFIG["covers"]["crop_bottom"])
 
 
 def run(*a):
@@ -36,12 +41,12 @@ def gray_ops(t: dict, autolevel_default="1"):
 
 
 def place_on_canvas(src, out: Path, negate: bool):
-    """scale `src` to fit 232px and centre it on the 320x240 near-black CANVAS
+    """scale `src` to fit FIT px and centre it on the WxH near-black CANVAS
     (optionally negating first). Shared by 07_icons and any single-subject image."""
     out.parent.mkdir(parents=True, exist_ok=True)
     vf = (("negate," if negate else "")
-          + "scale=232:232:force_original_aspect_ratio=decrease:flags=lanczos,"
-          + f"pad=320:240:(ow-iw)/2:(oh-ih)/2:{CANVAS}")
+          + f"scale={FIT}:{FIT}:force_original_aspect_ratio=decrease:flags=lanczos,"
+          + f"pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:{CANVAS}")
     rc, _ = run(FFMPEG, "-hide_banner", "-loglevel", "error", "-y", "-i", src,
                 "-vf", vf, "-frames:v", "1", out)
     return rc == 0 and Path(out).exists()

@@ -1,0 +1,159 @@
+{
+  "title": "Les histoires de Timoté",
+  "description": "Pack perso - histoires Timoté (audiolivres Gründ)",
+  "lang": "fr",
+  "nightModeAvailable": false,
+
+  "source_dir": "..",
+  "source_ext": ["mp3"],
+  "menu_root_name": "Histoires de Timote",
+  "slug_prefix": "timote-",
+
+  "audio": {
+    "sample_rate": 44100, "channels": 1, "codec": "libmp3lame",
+    "bitrate": "256k", "target_lufs": -16, "target_tp": -1.5
+  },
+  "merge": { "lead": 0.3, "tail": 0.6, "gap": 0.8, "trim_silence_db": -50 },
+
+  "filename_pattern": "^(?P<num>\\d+) Timoté - (?:Chapitre (?P<chapter>\\d+) - )?(?P<title>.+?)(?: - Timoté)?$",
+  "num_group": "num",
+  "chapter_group": "chapter",
+  "title_group": "title",
+  "story_key_strip_prefix": "^timote\\s+",
+
+  "discard": {
+    "091": "doublon de 008", "097": "doublon de 065", "109": "doublon de 031",
+    "133": "doublon de 003", "141": "doublon de 014", "197": "doublon de 062",
+    "242": "doublon de 013", "248": "doublon de 033",
+    "082": "chapitre 1 seul (au bord de la mer)",
+    "147": "chapitre 1 seul (fait du poney)",
+    "115": "fragment Volume 3", "121": "fragment Volume 3",
+    "127": "fragment Volume 3", "139": "fragment Volume 3"
+  },
+
+  "categories": [
+    { "name": "1 Quotidien et autonomie", "prompt": "Le quotidien.", "icon": "1F3E0",
+      "stories": ["fait un gateau", "jardine", "aime tout faire tout seul", "et son doudou", "et sa tetine"] },
+    { "name": "2 Emotions et grandir", "prompt": "Les émotions.", "icon": "1F60A",
+      "stories": ["et ses emotions", "est amoureux", "devient grand frere", "et la petite souris",
+                  "dort chez un copain", "et les ecrans", "fait des betises"] },
+    { "name": "3 Ecole", "prompt": "L'école.", "icon": "1F3EB",
+      "stories": ["entre a l ecole", "va a la cantine", "apprend l anglais", "va au centre de loisirs",
+                  "aime la musique", "decouvre les chiffres", "decouvre les lettres"] },
+    { "name": "4 Sorties et culture", "prompt": "Les sorties et la culture.", "icon": "1F3AA",
+      "stories": ["visite le musee d orsay", "visite le louvre", "va au spectacle", "va a la bibliotheque",
+                  "a l aquarium", "va au cirque", "visite un chateau fort"] },
+    { "name": "5 Voyages", "prompt": "Les voyages.", "icon": "1F697",
+      "stories": ["visite la bretagne", "prend le train", "visite paris"] },
+    { "name": "6 Sport et plein air", "prompt": "Le sport et le plein air.", "icon": "26BD",
+      "stories": ["joue au foot", "fait du velo", "fait du ski", "fait de la trottinette"] },
+    { "name": "7 Fetes", "prompt": "Les fêtes.", "icon": "1F382",
+      "stories": ["fete son anniversaire", "fete la saint nicolas", "et le noel magique"] },
+    { "name": "8 Corps et sante", "prompt": "Le corps et la santé.", "icon": "1FA79",
+      "stories": ["est malade", "va chez le docteur", "et ses lunettes"] },
+    { "name": "9 Nature et animaux", "prompt": "La nature et les animaux.", "icon": "1F98B",
+      "stories": ["aime la planete", "veut un animal", "a la ferme", "et le chantier",
+                  "chez les pompiers", "se promene en foret"] }
+  ],
+  "uncategorized_name": "Divers",
+
+  "story_icons": {
+    "aime tout faire tout seul": "1F4AA",
+    "decouvre les chiffres": "1F522",
+    "decouvre les lettres": "1F524",
+    "et sa tetine": "1F476",
+    "et son doudou": "1F9F8",
+    "fait un gateau": "1F9C1",
+    "jardine": "1F331",
+    "devient grand frere": "1F37C",
+    "dort chez un copain": "1F6CC",
+    "est amoureux": "1F498",
+    "et la petite souris": "1F9B7",
+    "et les ecrans": "1F4F1",
+    "et ses emotions": "1F60A",
+    "fait des betises": "1F648",
+    "aime la musique": "1F3B5",
+    "apprend l anglais": "1F4D6",
+    "entre a l ecole": "1F3EB",
+    "va a la cantine": "1F374",
+    "va au centre de loisirs": "1F3A8",
+    "a l aquarium": "1F420",
+    "va a la bibliotheque": "1F4DA",
+    "va au cirque": "1F3AA",
+    "va au spectacle": "1F3AC",
+    "visite le louvre": "1F5BC",
+    "visite le musee d orsay": "1F3DB",
+    "visite paris": "1F5FC",
+    "visite un chateau fort": "1F3F0",
+    "prend le train": "1F682",
+    "visite la bretagne": "26F5",
+    "fait de la trottinette": "1F6F4",
+    "fait du ski": "1F3BF",
+    "fait du velo": "1F6B2",
+    "joue au foot": "26BD",
+    "se promene en foret": "1F332",
+    "et le noel magique": "1F384",
+    "fete la saint nicolas": "1F381",
+    "fete son anniversaire": "1F388",
+    "est malade": "1F912",
+    "et ses lunettes": "1F453",
+    "va chez le docteur": "1F3E5",
+    "a la ferme": "1F404",
+    "aime la planete": "1F30D",
+    "veut un animal": "1F436",
+    "chez les pompiers": "1F692",
+    "et le chantier": "1F6A7"
+  },
+
+  "menu_prompts": {
+    "root": "Choisis une histoire de Timoté.",
+    "category_chooser": "Choisis un thème."
+  },
+  "first_menu_audio_only": true,
+
+  "titles": {
+    "mode": "detect",
+    "fuzzy_first_word": true,
+    "synonyms": { "timothee": "timote", "timotee": "timote" },
+    "strip_key_word": "timote",
+    "clip_bitrate": "192k",
+    "lead": 0.15, "fade_out": 0.26, "vad_l": 0.40, "vad_r": 0.28
+  },
+
+  "icons": {
+    "mode": "emoji",
+    "set": "black",
+    "url": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/{set}/svg/{code}.svg",
+    "render_bg": "0xF6F3EC"
+  },
+
+  "covers": {
+    "mode": "spotify",
+    "bad_album": "\\b(5 histoires|aventures de timot|int[\u00e9e]grale|coffret|compilation|une ann[\u00e9e]e avec|le quotidien de timot|best of|volume)\\b",
+    "good_artist": "lizzie|gr[\u00fcu]nd|timot|massonaud",
+    "crop_top": 0.30, "crop_bottom": 0.16
+  },
+
+  "pack_cover": {
+    "mode": "floodfill",
+    "src": "covers/raw/_artist_timote.jpg",
+    "bg": "srgb(52,60,132)",
+    "fuzz": "22%"
+  },
+
+  "image": { "canvas": "#0A0D12", "w": 320, "h": 240, "fit": 232 },
+
+  "tts": {
+    "engine": "piper",
+    "model": "tools/piper/fr_FR-siwis-medium.onnx",
+    "lead": 0.15, "tail": 0.4
+  },
+
+  "tools": {
+    "ffmpeg": "C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe",
+    "ffprobe": "C:\\Program Files\\ffmpeg\\bin\\ffprobe.exe",
+    "uv": "C:\\Users\\gia_a\\AppData\\Local\\Microsoft\\WinGet\\Packages\\astral-sh.uv_Microsoft.Winget.Source_8wekyb3d8bbwe\\uv.exe",
+    "spg": "tools/spg/Studio-Pack-Generator/studio-pack-generator-x86_64-windows.exe",
+    "imagemagick": "tools/spg/Studio-Pack-Generator/tools/convert.exe"
+  }
+}
