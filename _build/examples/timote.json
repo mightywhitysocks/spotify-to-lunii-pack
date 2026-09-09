@@ -118,7 +118,6 @@
     "mode": "detect",
     "fuzzy_first_word": true,
     "synonyms": { "timothee": "timote", "timotee": "timote" },
-    "strip_key_word": "timote",
     "clip_bitrate": "192k",
     "lead": 0.15, "fade_out": 0.26, "vad_l": 0.40, "vad_r": 0.28
   },

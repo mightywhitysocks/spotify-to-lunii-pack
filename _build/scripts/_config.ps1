@@ -64,7 +64,7 @@ $Defaults = @{
     story_icons            = @{}
     menu_prompts           = @{ root = ''; category_chooser = '' }
     first_menu_audio_only  = $false
-    titles = @{ mode = 'off'; fuzzy_first_word = $false; synonyms = @{}; strip_key_word = '';
+    titles = @{ mode = 'off'; fuzzy_first_word = $false; synonyms = @{};
                 clip_bitrate = '192k'; lead = 0.15; fade_out = 0.26; vad_l = 0.40; vad_r = 0.28;
                 trim_head_db = -48; trim_head_window = 0.18;
                 trim_tail_db = -45; trim_tail_window = 0.08;

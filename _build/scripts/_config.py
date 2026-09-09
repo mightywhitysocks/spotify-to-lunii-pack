@@ -59,7 +59,6 @@ DEFAULTS = {
         "mode": "off",             # "detect" | "off"
         "fuzzy_first_word": False,
         "synonyms": {},
-        "strip_key_word": "",
         "clip_bitrate": "192k",
         "lead": 0.15, "fade_out": 0.26, "vad_l": 0.40, "vad_r": 0.28,
         "trim_head_db": -48, "trim_head_window": 0.18,
