@@ -10,10 +10,14 @@
   Each generator invalidates its own backups (02_merge moves / -Rebuild purges;
   03_titles + 04_menu_tts delete what they re-wrote), so a plain re-run is safe.
   -Only '<pat>'  restricts to files whose relative path matches; -Fresh is a
-  paranoia reset that rebuilds every backup from the current tree.
+  paranoia reset that rebuilds every backup from the current tree. Iterating on a
+  few clips? -Only keeps a run to seconds -- a full ~100-file run is ~10 min
+  (ffmpeg-normalize's own two passes dominate; see issue #27).
   Outputs: normalize_report.csv (before/after delta, processed files only).
-  The canonical full loudness/format snapshot is audio_report.csv, written by
-  04d_report.ps1.
+  "before" figures come from ffmpeg-normalize's --print-stats (its pass 1 already
+  measures the pristine input) -- no extra ffmpeg pass. "after" is a real
+  re-measure of the encoded file. The canonical full loudness/format snapshot is
+  audio_report.csv, written by 04d_report.ps1.
 #>
 param([switch]$Fresh, [string[]]$Only)
 $ErrorActionPreference = 'Stop'
@@ -47,18 +51,19 @@ $report = foreach ($f in $files) {
         # first time we see this file: the tree copy is the pristine source
         Copy-Item -LiteralPath $f.FullName -Destination $bak -Force
     }
-    # measure the PRISTINE copy (the tree file may already be normalised)
-    $before = Measure-Loudness $bak $cl
     $tmp = "$($f.FullName).norm.mp3"
-    & $uv tool run --from ffmpeg-normalize ffmpeg-normalize $bak -o $tmp -f `
-        -t $tLufs -tp $tTp -nt ebu -c:a $codec -b:a $brate -ar $sr 2>&1 | Out-Null
+    # --print-stats emits JSON on stdout; ffmpeg-normalize's pass 1 measures the
+    # pristine $bak, so ebu_pass1 is the "before" delta with no extra ffmpeg pass.
+    $stats = & $uv tool run --from ffmpeg-normalize ffmpeg-normalize $bak -o $tmp -f `
+        -t $tLufs -tp $tTp -nt ebu -c:a $codec -b:a $brate -ar $sr --print-stats 2>$null
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $tmp)) { throw "normalize failed: $($f.Name)" }
     Move-Item -LiteralPath $tmp -Destination $f.FullName -Force
+    $p1 = (@($stats | ConvertFrom-Json)[0]).ebu_pass1
     $after = Measure-Loudness $f.FullName $cl
-    Write-Host ("  {0,-42} {1,6} -> {2,6} LUFS  (tp {3})" -f $f.Name, $before.lufs, $after.lufs, $after.peak)
+    Write-Host ("  {0,-42} {1,6} -> {2,6} LUFS  (tp {3})" -f $f.Name, $p1.input_i, $after.lufs, $after.peak)
     [pscustomobject]@{
         file = $f.FullName.Substring($tree.Length + 1)
-        lufs_before = $before.lufs; peak_before = $before.peak
+        lufs_before = $p1.input_i; peak_before = $p1.input_tp
         lufs_after  = $after.lufs;  peak_after  = $after.peak
     }
 }
