@@ -3,7 +3,8 @@ $ErrorActionPreference = 'Stop'
 [Threading.Thread]::CurrentThread.CurrentCulture = 'en-US'
 . "$PSScriptRoot\_config.ps1"
 $build = $Cfg.build; $tree = $Cfg.tree
-$ffmpeg = Assert-Tool $Cfg.ffmpeg 'ffmpeg'; $ffprobe = Assert-Tool $Cfg.ffprobe 'ffprobe'
+$null = Assert-Tool $Cfg.ffmpeg 'ffmpeg'   # guard only; Measure-Loudness calls $Cfg.ffmpeg
+$ffprobe = Assert-Tool $Cfg.ffprobe 'ffprobe'
 $sr = $Cfg.audio.sample_rate; $ch = $Cfg.audio.channels
 $cl = if ($ch -eq 1) { 'mono' } else { 'stereo' }
 $fmtWant = "$sr,$ch"

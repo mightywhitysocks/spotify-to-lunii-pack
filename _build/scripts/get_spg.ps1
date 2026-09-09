@@ -32,16 +32,20 @@ $Assets = @{
 function Get-PlatformKey {
     $arch = [Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower()  # x64 | arm64 | ...
     if ($IsWindows -or $env:OS -eq 'Windows_NT') { return 'x86_64-windows' }
-    if ($IsMacOS)   { return $(if ($arch -match 'arm|aarch') { 'aarch64-apple' } else { 'x86_64-apple' }) }
+    if ($IsMacOS)   { return ($arch -match 'arm|aarch' ? 'aarch64-apple' : 'x86_64-apple') }
     if ($IsLinux)   { return 'x86_64-linux' }
     throw "plateforme non reconnue (arch=$arch) -- télécharge SPG $Version à la main dans $SpgDir"
 }
 
+function Find-SpgBinary {
+    # the lone executable the release zip unpacks under $SpgDir
+    Get-ChildItem -LiteralPath $SpgDir -Recurse -File -Filter 'studio-pack-generator*' -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -notmatch '\.(zip|txt|md)$' } | Select-Object -First 1
+}
+
 $key = Get-PlatformKey
 $asset = $Assets[$key]
-$existing = if (Test-Path -LiteralPath $SpgDir) {
-    Get-ChildItem -LiteralPath $SpgDir -Recurse -File -Filter 'studio-pack-generator*' -ErrorAction SilentlyContinue | Select-Object -First 1
-}
+$existing = Find-SpgBinary
 if ($existing -and -not $Force) {
     Write-Host "SPG déjà présent : $($existing.FullName)`n(-Force pour re-télécharger)"
     return
@@ -60,12 +64,11 @@ if ($got -ne $asset.Sha256) {
 }
 Write-Host "checksum OK"
 
-if (Test-Path -LiteralPath $SpgDir) { Remove-Item -LiteralPath $SpgDir -Recurse -Force }
+Remove-Item -LiteralPath $SpgDir -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force $SpgDir | Out-Null
 Expand-Archive -LiteralPath $ZipPath -DestinationPath $SpgDir -Force
 
-$bin = Get-ChildItem -LiteralPath $SpgDir -Recurse -File -Filter 'studio-pack-generator*' |
-       Where-Object { $_.Name -notmatch '\.(zip|txt|md)$' } | Select-Object -First 1
+$bin = Find-SpgBinary
 if (-not $bin) { throw "binaire introuvable après extraction dans $SpgDir" }
 if ($IsLinux -or $IsMacOS) { chmod +x $bin.FullName }
 Write-Host "`nOK — SPG $Version : $($bin.FullName)"

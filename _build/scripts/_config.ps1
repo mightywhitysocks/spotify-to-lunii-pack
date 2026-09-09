@@ -160,17 +160,17 @@ if (-not $Cfg.menu_root_name) { $Cfg.menu_root_name = ConvertTo-Slug $Cfg.title 
 
 # ---- tool resolution ----------------------------------------------------
 # vendored, unpacked binaries that were never added to PATH (see
-# project.local.json.example): scan _build\tools\** for a known name.
-# Mirror of _find_vendored in _config.py -- keep the two in sync.
+# project.local.json.example): look under _build\tools\** for a known name.
+# -Filter matches at the FS level, so the large icon-cache subtrees never get
+# enumerated in full. Mirror of _find_vendored in _config.py -- keep in sync.
 function Find-VendoredTool([string[]]$names) {
     $toolsDir = Join-Path $BuildDir 'tools'
     if (-not (Test-Path -LiteralPath $toolsDir)) { return $null }
-    $want = [Collections.Generic.HashSet[string]]::new(
-        [string[]]$names, [StringComparer]::OrdinalIgnoreCase)
-    $hit = Get-ChildItem -LiteralPath $toolsDir -Recurse -File -ErrorAction SilentlyContinue |
-           Where-Object { $want.Contains($_.Name) } |
-           Sort-Object FullName | Select-Object -First 1
-    if ($hit) { return $hit.FullName }
+    foreach ($n in $names) {
+        $hit = Get-ChildItem -LiteralPath $toolsDir -Recurse -File -Filter $n -ErrorAction SilentlyContinue |
+               Sort-Object FullName | Select-Object -First 1
+        if ($hit) { return $hit.FullName }
+    }
     return $null
 }
 function Resolve-Tool($value, [string[]]$names) {

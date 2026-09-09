@@ -9,7 +9,8 @@ $ErrorActionPreference = 'Stop'
 [Threading.Thread]::CurrentThread.CurrentCulture = 'en-US'   # period decimals in CSV/JSON
 . "$PSScriptRoot\_config.ps1"
 $src = $Cfg.src; $build = $Cfg.build
-$ffprobe = Assert-Tool $Cfg.ffprobe 'ffprobe'; $ffmpeg = Assert-Tool $Cfg.ffmpeg 'ffmpeg'
+$ffprobe = Assert-Tool $Cfg.ffprobe 'ffprobe'
+$null = Assert-Tool $Cfg.ffmpeg 'ffmpeg'   # guard only; Measure-Loudness calls $Cfg.ffmpeg
 
 function Remove-Accents([string]$s) {
     $n = $s.Normalize([Text.NormalizationForm]::FormD)

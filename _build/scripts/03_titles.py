@@ -48,6 +48,9 @@ TRIM_DETECTION = str(T["trim_detection"])
 TRIM_PAD = float(T["trim_pad"])
 SYN = {str(k): str(v) for k, v in (T.get("synonyms") or {}).items()}
 FUZZ = bool(T.get("fuzzy_first_word"))
+# title_windows.csv columns. ov_start/ov_end record the override window 03 last
+# cut from, so an unchanged override is kept on the next run (see run()).
+FIELDS = ["base", "start", "end", "ov_start", "ov_end", "dur", "method", "flag", "title"]
 
 
 def norm(s):
@@ -158,13 +161,8 @@ def transcribe(path, clip=None):
     return out, txt.strip()
 
 
-FIELDS = ["base", "start", "end", "ov_start", "ov_end", "dur", "method", "flag", "title"]
-
-
 def _write_csv(full, rows):
-    """merge results into title_windows.csv -- never blank a manual start/end.
-    ov_start/ov_end record the override window this script last cut from, so an
-    unchanged override can be kept on the next run (see run())."""
+    """merge results into title_windows.csv -- never blank a manual start/end."""
     existing = {}
     if OVERRIDES.exists():
         for r in csv.DictReader(OVERRIDES.open(encoding="utf-8-sig")):
@@ -229,7 +227,6 @@ def run():
     if OVERRIDES.exists():
         for r in csv.DictReader(OVERRIDES.open(encoding="utf-8-sig")):
             prev_row[r["base"]] = r
-    prev_dur = {b: (r.get("dur") or "") for b, r in prev_row.items()}
     orphans = [b for b in ov if b not in {s["base"] for s in full}]
     if orphans:
         print(f"!! {len(orphans)} override(s) sans histoire correspondante (slug obsolète ?): "
@@ -245,22 +242,21 @@ def run():
 
         prev = prev_row.get(base, {})
         ov_win = ov.get(base)
+        ov_start, ov_end = ov_win or ("", "")
         # an override whose window is byte-for-byte what we last cut from is as
-        # safe to keep as a detected clip -- re-cutting it only drops the clip
-        # back to raw level and forces a needless 04b -Only afterwards.
-        ov_kept = ov_win is not None and (
+        # safe to keep as a detected clip -- re-cutting only drops it back to raw
+        # level and forces a needless 04b -Only afterwards.
+        ov_unchanged = ov_win is None or (
             _same_win(prev.get("ov_start"), ov_win[0])
             and _same_win(prev.get("ov_end"), ov_win[1]))
-        if (KEEP_EXISTING and item.exists() and base not in FORCE
-                and (ov_win is None or ov_kept)):
-            fdur = prev_dur.get(base) or probe_dur(item)
+        if KEEP_EXISTING and item.exists() and base not in FORCE and ov_unchanged:
+            fdur = prev.get("dur") or probe_dur(item)
             # a kept override carries its human-set review flag forward (an
             # unchanged detected clip has none to carry).
-            kflag = prev.get("flag", "") if ov_kept else ""
+            kflag = prev.get("flag", "") if ov_win else ""
             rows.append(dict(base=base, title=st["title"], method="kept", flag=kflag,
                              dur=fdur, heard="(clip inchangé)", item=str(item),
-                             ov_start=(ov_win[0] if ov_win else ""),
-                             ov_end=(ov_win[1] if ov_win else "")))
+                             ov_start=ov_start, ov_end=ov_end))
             print(f"  {'kept':9s} {'':10s} {str(fdur):>4}s  {base}", flush=True)
             continue
 
@@ -302,8 +298,7 @@ def run():
 
         rows.append(dict(base=base, title=st["title"], method=method, flag=flag,
                          dur=round(fdur, 2), heard=heard[:140], item=str(item),
-                         ov_start=(ov_win[0] if ov_win else ""),
-                         ov_end=(ov_win[1] if ov_win else "")))
+                         ov_start=ov_start, ov_end=ov_end))
         print(f"  {method:9s} {flag:10s} {fdur:4.1f}s  {base}   [{heard[:60]}]", flush=True)
 
     _write_csv(full, rows)

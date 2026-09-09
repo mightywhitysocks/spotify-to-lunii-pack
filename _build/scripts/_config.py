@@ -143,7 +143,7 @@ def _unknown_keys(user, defaults, prefix=""):
     return out
 
 
-def _validate(cfg, raw_keys_source):
+def _validate(cfg, raw, src_name):
     """Fail loud on an impossible enum value; warn on an unknown key."""
     bad = []
     for (section, key), allowed in _MODE_ENUMS.items():
@@ -154,9 +154,9 @@ def _validate(cfg, raw_keys_source):
         if not isinstance(cfg.get(k), list):
             bad.append(f"{k} doit être une liste JSON")
     if bad:
-        raise SystemExit(f"project.json invalide ({_config_path().name}) :\n  - "
+        raise SystemExit(f"project.json invalide ({src_name}) :\n  - "
                          + "\n  - ".join(bad))
-    for path in _unknown_keys(raw_keys_source, DEFAULTS):
+    for path in _unknown_keys(raw, DEFAULTS):
         print(f"!! project.json : clé inconnue ignorée -> {path}", flush=True)
 
 
@@ -182,12 +182,12 @@ def _load():
     # always at _build/project.local.json regardless of PACK_CONFIG. See
     # project.local.json.example.
     local_path = BUILD / "project.local.json"
-    raw = dict(user)
+    raw = user
     if local_path.exists():
         local = json.loads(local_path.read_text(encoding="utf-8"))
         cfg = _deep_merge(cfg, local)
-        raw = _deep_merge(raw, local)
-    _validate(cfg, raw)
+        raw = _deep_merge(user, local)   # _deep_merge copies, never mutates
+    _validate(cfg, raw, path.name)
     if not cfg.get("menu_root_name"):
         cfg["menu_root_name"] = slugify(cfg["title"])
     if not cfg["tts"].get("lead"):
@@ -207,17 +207,17 @@ RAW_AUDIO = BUILD / "work" / "raw_audio"                  # 04b_normalize's loud
 
 
 def _find_vendored(names):
-    """Scan ``_build/tools/**`` for a file whose name is one of ``names`` --
-    vendored, unpacked binaries that were never added to PATH (see
-    ``project.local.json.example``). Returns the first match (sorted) or None.
-    Mirror of the same fallback in _config.ps1 -- keep the two in sync."""
+    """Look under ``_build/tools/**`` for a vendored, unpacked binary that was
+    never added to PATH (see ``project.local.json.example``). Globs each name so
+    the icon-cache files are never materialised/sorted. Returns the first match
+    or None. Mirror of Find-VendoredTool in _config.ps1 -- keep the two in sync."""
     tools_dir = BUILD / "tools"
     if not tools_dir.is_dir():
         return None
-    wanted = {n.lower() for n in names}
-    for p in sorted(tools_dir.rglob("*")):
-        if p.name.lower() in wanted and p.is_file():
-            return str(p)
+    for n in names:
+        for hit in sorted(tools_dir.glob(f"**/{n}")):
+            if hit.is_file():
+                return str(hit)
     return None
 
 
