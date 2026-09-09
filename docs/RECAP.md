@@ -23,6 +23,9 @@ Un correctif = un commit poussé sur `main`.
 un correctif partiel sur #3. La doc (README racine + `_build/README` +
 `project.schema.md`) a été maintenue à chaque correctif.
 
+Passe `/simplify` sur l'ensemble du lot (`e781218`) : dédup et allègement du code
+touché (03_titles, `_config.*`, get_spg), sans changement de comportement.
+
 ## Restent ouvertes
 
 Toutes `needs-decision` / `blocked` / `needs-investigation`, ou gros chantiers
