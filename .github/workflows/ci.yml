@@ -24,7 +24,8 @@ jobs:
 
       - name: Load _config.py (falls back to project.example.json)
         working-directory: _build
-        run: python -c "import sys; sys.path.insert(0, 'scripts'); import _config; print('config OK:', _config.CONFIG['title'])"
+        run: |
+          python -c "import sys; sys.path.insert(0, 'scripts'); import _config; print('config OK:', _config.CONFIG['title'])"
 
       - name: Parse every PowerShell script
         shell: pwsh
@@ -44,4 +45,6 @@ jobs:
       - name: Dot-source _config.ps1
         shell: pwsh
         working-directory: _build
-        run: . ./scripts/_config.ps1; "config OK: $($Cfg.title)"
+        run: |
+          . ./scripts/_config.ps1
+          "config OK: $($Cfg.title)"
